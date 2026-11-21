@@ -98,6 +98,7 @@ class IntentResult(BaseModel):
     confidence: float | None = None  # provider-native (Jev); None for Claude
     usage: dict[str, int] | None = None
     rawIntent: str | None = None  # what the provider literally returned, before validation
+    rawResponse: dict[str, Any] | None = None  # provider answer payload (no secrets; message text excluded)
     error: str | None = None
 
     @field_validator("latencyMs")

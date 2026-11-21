@@ -58,6 +58,12 @@ class ClaudeClassifier:
         for k in ("cache_read_input_tokens", "cache_creation_input_tokens"):
             if getattr(u, k, None):
                 usage[k] = getattr(u, k)
+        blocks = getattr(resp, "content", None) or []
+        raw_response = {"model": resp.model, "stop_reason": resp.stop_reason,
+                        "content_block_types": [getattr(b, "type", "?") for b in blocks],
+                        "text": "".join(getattr(b, "text", "") for b in blocks if getattr(b, "type", "") == "text") or None,
+                        "usage": usage}
         return IntentResult(provider="anthropic", model=resp.model, intent=intent,
                             schemaValid=valid and parsed is not None, latencyMs=latency, usage=usage, rawIntent=raw,
+                            rawResponse=raw_response,
                             error=None if parsed is not None else f"no parsed output (stop_reason={resp.stop_reason})")

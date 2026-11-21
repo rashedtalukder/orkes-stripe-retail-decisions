@@ -1,9 +1,10 @@
 """Conductor workers (official conductor-python SDK). Run with: python -m stripe_decisions workers
 
 Workers do I/O, validation and normalization. None of them decides policy.
-"""
 
-from __future__ import annotations
+Note: no `from __future__ import annotations` here. The SDK reads worker parameter annotations at
+runtime to convert task input, so they must be real types (not strings, not typing.Any).
+"""
 
 import logging
 from typing import Any
@@ -22,7 +23,7 @@ log = logging.getLogger("stripe_decisions.workers")
 _classifiers: dict[str, Any] = {}
 
 
-def fetch_billing_facts(case: dict | None, factsSource: str | None = None, fixtureId: str | None = None) -> dict:
+def fetch_billing_facts(case, factsSource=None, fixtureId=None) -> dict:
     try:
         c = BillingCase.model_validate(case or {})
     except ValidationError as e:
@@ -38,7 +39,7 @@ def fetch_billing_facts(case: dict | None, factsSource: str | None = None, fixtu
     return facts.model_dump(mode="json")
 
 
-def classify_intent(message: str | None, classifier: str | None) -> dict:
+def classify_intent(message, classifier) -> dict:
     name = (classifier or "").lower()
     try:
         if name not in _classifiers:
@@ -64,7 +65,7 @@ def sd_classify_intent(message: str = None, classifier: str = None) -> dict:
 @worker_task(task_definition_name="sd_execute_refund", thread_count=1)
 def sd_execute_refund(caseId: str = None, customerId: str = None, decision: str = None, ruleId: str = None,
                       policyVersion: str = None, chargeId: str = None, amountCents: int = None,
-                      currency: str = None, factsSource: str = None, dryRun: Any = True) -> dict:
+                      currency: str = None, factsSource: str = None, dryRun: object = True) -> dict:
     return safe_execute_refund(case_id=caseId, customer_id=customerId, decision=decision, rule_id=ruleId,
                                policy_version=policyVersion, charge_id=chargeId, amount_cents=amountCents,
                                currency=currency, facts_source=factsSource, dry_run=dryRun)

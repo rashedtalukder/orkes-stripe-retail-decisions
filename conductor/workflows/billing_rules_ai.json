@@ -69,7 +69,7 @@
       "type": "BUSINESS_RULE",
       "description": "Native Orkes Business Rule. Policy billing-support-policy/v1, sha256 20606ec3c7cb",
       "inputParameters": {
-        "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/UNPUBLISHED/rules/billing_support_policy.v1.csv",
+        "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
         "executionStrategy": "FIRE_FIRST",
         "cacheTimeoutMinutes": 5,
         "inputColumns": {

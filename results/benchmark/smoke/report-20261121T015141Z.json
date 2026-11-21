@@ -1,0 +1,315 @@
+{
+  "meta": {
+    "run_id": "20261121T015141Z",
+    "date_utc": "2026-11-21T01:52:14+00:00",
+    "dataset": "dataset.v1.jsonl",
+    "dataset_rows": 8,
+    "repeats": 2,
+    "providers": [
+      "jev",
+      "claude"
+    ],
+    "workflow_sample_ids": [
+      "B001",
+      "B002",
+      "B003",
+      "B006"
+    ],
+    "policy_version": "billing-support-policy/v1",
+    "rule_file_sha256": "20606ec3c7cbbc1097cab7cdf414ae90832d7703c85cfe105d1cd092477306c7",
+    "rule_file_url": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
+    "adapter_settings": {
+      "claude_model": "claude-haiku-5-5",
+      "claude_effort": "low",
+      "jev_model": "jev-1.14.0",
+      "retries": 0,
+      "concurrency": 4
+    },
+    "max_cost_usd": 0.05,
+    "pricing": {
+      "_note": "List prices used for ESTIMATED cost. Verify before publishing; prices change. Cost = tokens x price; no discounts, batch, or caching assumed.",
+      "retrieved_at": "2026-11-20",
+      "typesafe": {
+        "jev-1.14.0": {
+          "input_usd_per_mtok": 0.042,
+          "output_usd_per_mtok": 0.0,
+          "source": "https://typesafe.ai/pricing (Jev 1.14: $42 per billion input tokens; output tokens free)"
+        }
+      },
+      "anthropic": {
+        "claude-haiku-5-5": {
+          "input_usd_per_mtok": 0.1,
+          "output_usd_per_mtok": 0.5,
+          "source": "https://platform.claude.com/docs/en/about-claude/pricing (Claude Haiku 5.5, prompts up to 100,000 tokens)"
+        }
+      }
+    },
+    "wall_seconds": 32.0,
+    "facts": "frozen fixtures normalized from real Stripe sandbox reads (fixtures/facts)",
+    "policy_engine": "Orkes Conductor BUSINESS_RULE via billing_policy_eval v1",
+    "raw_dir": "results/runs/20261121T015141Z"
+  },
+  "dataset": {
+    "cases": 8,
+    "by_intent": {
+      "DUPLICATE_CHARGE_CLAIM": 8
+    },
+    "by_difficulty": {
+      "obvious": 7,
+      "ambiguous": 1
+    },
+    "gold_decisions": {
+      "APPROVE_REFUND": 7,
+      "HUMAN_REVIEW": 1
+    }
+  },
+  "policy_evaluations": {
+    "distinct_combinations": 2,
+    "failed": 0,
+    "gold_decision_failures": []
+  },
+  "providers": {
+    "anthropic": {
+      "model_versions": [
+        "claude-haiku-5-5"
+      ],
+      "calls": 16,
+      "expected_calls": 16,
+      "complete": true,
+      "repeats": 2,
+      "intent_accuracy": 1.0,
+      "intent_accuracy_majority_vote": 1.0,
+      "accuracy_by_difficulty": {
+        "ambiguous": 1.0,
+        "obvious": 1.0
+      },
+      "consistency_all_repeats_agree": 1.0,
+      "schema_valid_rate": 1.0,
+      "invalid_outputs": 0,
+      "error_rate": 0.0,
+      "errors": 0,
+      "policy_evaluation_failures": 0,
+      "decision_agreement_with_gold_policy": 1.0,
+      "intent_errors": 0,
+      "intent_errors_with_same_decision": 0,
+      "correctly_automated_rate": 0.875,
+      "escalation_rate": 0.125,
+      "policy_violation_rate": 0.0,
+      "policy_violations": 0,
+      "model_latency_ms": {
+        "p50": 1195.8,
+        "p95": 1309.3,
+        "mean": 1207.2,
+        "n": 16
+      },
+      "usage_totals": {
+        "input_tokens": 11112,
+        "output_tokens": 464
+      },
+      "estimated_cost_usd_total": 0.001343,
+      "estimated_cost_per_correct_automated_decision_usd": 9.593e-05,
+      "confidence_reported_by_provider": false,
+      "accuracy_by_provider_confidence": null,
+      "confusion_matrix": {
+        "DUPLICATE_CHARGE_CLAIM": {
+          "DUPLICATE_CHARGE_CLAIM": 16,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "PRORATION_QUESTION": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "REFUND_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "CANCELLATION_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "FAILED_PAYMENT": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "UNKNOWN": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        }
+      }
+    },
+    "typesafe": {
+      "model_versions": [
+        "jev-1.14.0"
+      ],
+      "calls": 16,
+      "expected_calls": 16,
+      "complete": true,
+      "repeats": 2,
+      "intent_accuracy": 1.0,
+      "intent_accuracy_majority_vote": 1.0,
+      "accuracy_by_difficulty": {
+        "ambiguous": 1.0,
+        "obvious": 1.0
+      },
+      "consistency_all_repeats_agree": 1.0,
+      "schema_valid_rate": 1.0,
+      "invalid_outputs": 0,
+      "error_rate": 0.0,
+      "errors": 0,
+      "policy_evaluation_failures": 0,
+      "decision_agreement_with_gold_policy": 1.0,
+      "intent_errors": 0,
+      "intent_errors_with_same_decision": 0,
+      "correctly_automated_rate": 0.875,
+      "escalation_rate": 0.125,
+      "policy_violation_rate": 0.0,
+      "policy_violations": 0,
+      "model_latency_ms": {
+        "p50": 65.1,
+        "p95": 132.8,
+        "mean": 76.5,
+        "n": 16
+      },
+      "usage_totals": {
+        "input_tokens": 8814,
+        "output_tokens": 1424
+      },
+      "estimated_cost_usd_total": 0.00037,
+      "estimated_cost_per_correct_automated_decision_usd": 2.643e-05,
+      "confidence_reported_by_provider": true,
+      "accuracy_by_provider_confidence": {
+        "[0.95,1.00]": {
+          "n": 16,
+          "accuracy": 1.0
+        }
+      },
+      "confusion_matrix": {
+        "DUPLICATE_CHARGE_CLAIM": {
+          "DUPLICATE_CHARGE_CLAIM": 16,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "PRORATION_QUESTION": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "REFUND_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "CANCELLATION_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "FAILED_PAYMENT": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "UNKNOWN": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        }
+      }
+    }
+  },
+  "workflow": {
+    "claude": {
+      "runs": 4,
+      "completed": 4,
+      "failed_or_incomplete": 0,
+      "model_intent_accuracy": 1.0,
+      "workflow_decision_agreement_with_gold_policy": 1.0,
+      "workflow_ms": {
+        "p50": 2059.0,
+        "p95": 2404.2,
+        "n": 4
+      },
+      "classify_task_ms_p50": 1357.5,
+      "facts_task_ms_p50": 79.0,
+      "business_rule_task_ms_p50": 9.5,
+      "in_workflow_model_latency_ms_p50": 1278.0,
+      "estimated_model_cost_usd": 0.000336
+    },
+    "jev": {
+      "runs": 4,
+      "completed": 4,
+      "failed_or_incomplete": 0,
+      "model_intent_accuracy": 1.0,
+      "workflow_decision_agreement_with_gold_policy": 1.0,
+      "workflow_ms": {
+        "p50": 1039.5,
+        "p95": 1062.5,
+        "n": 4
+      },
+      "classify_task_ms_p50": 136.0,
+      "facts_task_ms_p50": 79.5,
+      "business_rule_task_ms_p50": 6.5,
+      "in_workflow_model_latency_ms_p50": 58.0,
+      "estimated_model_cost_usd": 9.3e-05
+    },
+    "rules": {
+      "runs": 4,
+      "completed": 4,
+      "failed_or_incomplete": 0,
+      "model_intent_accuracy": null,
+      "workflow_decision_agreement_with_gold_policy": 1.0,
+      "workflow_ms": {
+        "p50": 505.5,
+        "p95": 689.6,
+        "n": 4
+      },
+      "classify_task_ms_p50": null,
+      "facts_task_ms_p50": 81.0,
+      "business_rule_task_ms_p50": 10.0,
+      "in_workflow_model_latency_ms_p50": null,
+      "estimated_model_cost_usd": 0.0
+    }
+  }
+}

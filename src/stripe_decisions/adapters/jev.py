@@ -41,4 +41,7 @@ class JevClassifier:
             confidence=answer.confidence if answer is not None else None,
             usage={"input_tokens": resp.usage.input_tokens, "output_tokens": resp.usage.output_tokens},
             rawIntent=raw,
+            rawResponse={"model": resp.model,
+                         "answers": {k: v.model_dump(mode="json") for k, v in resp.answers.items()},
+                         "usage": resp.usage.model_dump(mode="json")},
         )

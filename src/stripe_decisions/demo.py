@@ -26,8 +26,7 @@ def run_demo(mode: str, scenario: str | None = None, offline: bool = False, dry_
         t0 = time.perf_counter()
         run = api.execute(wf, WORKFLOW_VERSION, inp, wait_seconds=30, correlation_id=f"demo-{mode}-{c['scenario']}")
         wid = run.get("workflowId") or run.get("id")
-        if run.get("status") == "RUNNING":
-            run = api.wait_for(wid, timeout_s=90)
+        run = api.wait_for(wid, timeout_s=90)  # full execution record (status, timings, tasks)
         wall_ms = (time.perf_counter() - t0) * 1000
         out = run.get("output") or {}
         decision = out.get("decision") or {}
@@ -43,7 +42,7 @@ def run_demo(mode: str, scenario: str | None = None, offline: bool = False, dry_
         })
         r = rows[-1]
         ok = "OK " if r["decision"] == r["expected"] else "MISMATCH"
-        print(f"{ok} {r['scenario']} intent={r['intent']:<22} decision={str(r['decision']):<20} rule={r['ruleId']} "
+        print(f"{ok} {r['scenario']} intent={str(r['intent']):<22} decision={str(r['decision']):<20} rule={r['ruleId']} "
               f"wf={wid} status={r['status']}")
     report = {"mode": mode, "offline_facts": offline, "dryRun": dry_run, "ran_at": datetime.now(timezone.utc).isoformat(),
               "server": api.s.ui_base, "rows": rows,

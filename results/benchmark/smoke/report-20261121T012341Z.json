@@ -1,0 +1,242 @@
+{
+  "meta": {
+    "run_id": "20261121T012341Z",
+    "date_utc": "2026-11-21T01:23:57+00:00",
+    "dataset": "dataset.v1.jsonl",
+    "dataset_rows": 6,
+    "repeats": 1,
+    "providers": [
+      "jev",
+      "claude"
+    ],
+    "policy_version": "billing-support-policy/v1",
+    "rule_file_sha256": "20606ec3c7cbbc1097cab7cdf414ae90832d7703c85cfe105d1cd092477306c7",
+    "rule_file_url": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
+    "adapter_settings": {
+      "claude_effort": "low",
+      "retries": 0,
+      "concurrency": 4
+    },
+    "pricing": {
+      "_note": "List prices used for ESTIMATED cost. Verify before publishing; prices change. Cost = tokens x price; no discounts, batch, or caching assumed.",
+      "retrieved_at": "2026-11-20",
+      "typesafe": {
+        "jev-1.14.0": {
+          "input_usd_per_mtok": 0.042,
+          "output_usd_per_mtok": 0.0,
+          "source": "https://typesafe.ai/pricing (Jev 1.14: $42 per billion input tokens; output tokens free)"
+        }
+      },
+      "anthropic": {
+        "claude-haiku-5-5": {
+          "input_usd_per_mtok": 0.1,
+          "output_usd_per_mtok": 0.5,
+          "source": "https://platform.claude.com/docs/en/about-claude/pricing (Claude Haiku 5.5, prompts up to 100,000 tokens)"
+        }
+      }
+    },
+    "wall_seconds": 15.8,
+    "facts": "frozen fixtures normalized from real Stripe sandbox reads (fixtures/facts)",
+    "policy_engine": "Orkes Conductor BUSINESS_RULE via billing_policy_eval v1"
+  },
+  "dataset": {
+    "cases": 6,
+    "by_intent": {
+      "DUPLICATE_CHARGE_CLAIM": 6
+    },
+    "by_difficulty": {
+      "obvious": 5,
+      "ambiguous": 1
+    },
+    "gold_decisions": {
+      "APPROVE_REFUND": 6
+    }
+  },
+  "providers": {
+    "anthropic": {
+      "model_versions": [
+        "claude-haiku-5-5"
+      ],
+      "calls": 6,
+      "repeats": 1,
+      "intent_accuracy": 1.0,
+      "accuracy_by_difficulty": {
+        "ambiguous": 1.0,
+        "obvious": 1.0
+      },
+      "consistency_all_repeats_agree": null,
+      "schema_valid_rate": 1.0,
+      "error_rate": 0.0,
+      "end_to_end_decision_correct_rate": 1.0,
+      "correctly_automated_rate": 1.0,
+      "escalation_rate": 0.0,
+      "policy_violation_rate": 0.0,
+      "model_latency_ms": {
+        "p50": 1256.0,
+        "p95": 1272.8,
+        "mean": 1251.0
+      },
+      "usage_totals": {
+        "input_tokens": 4166,
+        "output_tokens": 174
+      },
+      "estimated_cost_usd_total": 0.000504,
+      "estimated_cost_per_correct_automated_decision_usd": 8.4e-05,
+      "confidence_reported_by_provider": false,
+      "confusion_matrix": {
+        "DUPLICATE_CHARGE_CLAIM": {
+          "DUPLICATE_CHARGE_CLAIM": 6,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "PRORATION_QUESTION": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "REFUND_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "CANCELLATION_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "FAILED_PAYMENT": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "UNKNOWN": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        }
+      }
+    },
+    "typesafe": {
+      "model_versions": [
+        "jev-1.14.0"
+      ],
+      "calls": 6,
+      "repeats": 1,
+      "intent_accuracy": 1.0,
+      "accuracy_by_difficulty": {
+        "ambiguous": 1.0,
+        "obvious": 1.0
+      },
+      "consistency_all_repeats_agree": null,
+      "schema_valid_rate": 1.0,
+      "error_rate": 0.0,
+      "end_to_end_decision_correct_rate": 1.0,
+      "correctly_automated_rate": 1.0,
+      "escalation_rate": 0.0,
+      "policy_violation_rate": 0.0,
+      "model_latency_ms": {
+        "p50": 78.0,
+        "p95": 127.2,
+        "mean": 87.4
+      },
+      "usage_totals": {
+        "input_tokens": 3305,
+        "output_tokens": 534
+      },
+      "estimated_cost_usd_total": 0.000139,
+      "estimated_cost_per_correct_automated_decision_usd": 2.317e-05,
+      "confidence_reported_by_provider": true,
+      "confusion_matrix": {
+        "DUPLICATE_CHARGE_CLAIM": {
+          "DUPLICATE_CHARGE_CLAIM": 6,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "PRORATION_QUESTION": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "REFUND_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "CANCELLATION_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "FAILED_PAYMENT": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "UNKNOWN": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        }
+      }
+    }
+  },
+  "workflow_latency_ms": {
+    "claude": {
+      "runs": 2,
+      "workflow_p50": 1946.5,
+      "workflow_p95": 2117.9,
+      "classify_task_p50": 1351.0,
+      "business_rule_task_p50": 7.5
+    },
+    "jev": {
+      "runs": 2,
+      "workflow_p50": 769.5,
+      "workflow_p95": 1009.3,
+      "classify_task_p50": 298.0,
+      "business_rule_task_p50": 8.0
+    },
+    "rules": {
+      "runs": 2,
+      "workflow_p50": 585.5,
+      "workflow_p95": 663.4,
+      "classify_task_p50": null,
+      "business_rule_task_p50": 10.0
+    }
+  }
+}

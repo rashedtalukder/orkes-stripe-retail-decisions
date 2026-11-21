@@ -78,7 +78,11 @@ def cmd_benchmark(args: argparse.Namespace) -> int:
 
 def cmd_report(args: argparse.Namespace) -> int:
     from .report import render
-    print(render(args.path))
+    path = args.path
+    if args.rebuild:
+        from .benchmark import rebuild_report
+        path = rebuild_report(args.rebuild)
+    print(render(path))
     return 0
 
 
@@ -106,11 +110,12 @@ def build_parser() -> argparse.ArgumentParser:
     bm.add_argument("--repeats", type=int, default=3)
     bm.add_argument("--max-cost-usd", type=float, default=1.00, help="Abort if projected model spend exceeds this")
     bm.add_argument("--concurrency", type=int, default=4)
-    bm.add_argument("--workflow-sample", type=int, default=10, help="Full workflow runs per mode (0 to skip)")
+    bm.add_argument("--workflow-sample", type=int, default=24, help="Stratified full-workflow runs per mode (0 to skip)")
     bm.add_argument("--limit", type=int, help="Only the first N dataset rows (smoke test)")
     bm.set_defaults(fn=cmd_benchmark)
     rp = sub.add_parser("report", help="Render a benchmark report (markdown + charts) from recorded results")
     rp.add_argument("path", nargs="?", default="results/benchmark/latest.json")
+    rp.add_argument("--rebuild", metavar="RUN_ID", help="Recompute the report from results/runs/RUN_ID raw rows (no API calls)")
     rp.set_defaults(fn=cmd_report)
     return p
 

@@ -1,0 +1,476 @@
+{
+  "meta": {
+    "run_id": "20261121T015231Z",
+    "date_utc": "2026-11-21T01:58:46+00:00",
+    "dataset": "dataset.v1.jsonl",
+    "dataset_rows": 120,
+    "repeats": 3,
+    "providers": [
+      "jev",
+      "claude"
+    ],
+    "workflow_sample_ids": [
+      "B001",
+      "B002",
+      "B003",
+      "B004",
+      "B005",
+      "B006",
+      "B007",
+      "B012",
+      "B013",
+      "B014",
+      "B015",
+      "B016",
+      "B017",
+      "B018",
+      "B023",
+      "B027",
+      "B028",
+      "B029",
+      "B030",
+      "B048",
+      "B065",
+      "B066",
+      "B084",
+      "B099"
+    ],
+    "policy_version": "billing-support-policy/v1",
+    "rule_file_sha256": "20606ec3c7cbbc1097cab7cdf414ae90832d7703c85cfe105d1cd092477306c7",
+    "rule_file_url": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
+    "adapter_settings": {
+      "claude_model": "claude-haiku-5-5",
+      "claude_effort": "low",
+      "jev_model": "jev-1.14.0",
+      "retries": 0,
+      "concurrency": 4
+    },
+    "max_cost_usd": 1.0,
+    "pricing": {
+      "_note": "List prices used for ESTIMATED cost. Verify before publishing; prices change. Cost = tokens x price; no discounts, batch, or caching assumed.",
+      "retrieved_at": "2026-11-20",
+      "typesafe": {
+        "jev-1.14.0": {
+          "input_usd_per_mtok": 0.042,
+          "output_usd_per_mtok": 0.0,
+          "source": "https://typesafe.ai/pricing (Jev 1.14: $42 per billion input tokens; output tokens free)"
+        }
+      },
+      "anthropic": {
+        "claude-haiku-5-5": {
+          "input_usd_per_mtok": 0.1,
+          "output_usd_per_mtok": 0.5,
+          "source": "https://platform.claude.com/docs/en/about-claude/pricing (Claude Haiku 5.5, prompts up to 100,000 tokens)"
+        }
+      }
+    },
+    "wall_seconds": 375.0,
+    "facts": "frozen fixtures normalized from real Stripe sandbox reads (fixtures/facts)",
+    "policy_engine": "Orkes Conductor BUSINESS_RULE via billing_policy_eval v1",
+    "raw_dir": "results/runs/20261121T015231Z",
+    "report_rebuilt_utc": "2026-11-21T02:00:58+00:00"
+  },
+  "dataset": {
+    "cases": 120,
+    "by_intent": {
+      "DUPLICATE_CHARGE_CLAIM": 30,
+      "PRORATION_QUESTION": 18,
+      "REFUND_REQUEST": 22,
+      "CANCELLATION_REQUEST": 14,
+      "FAILED_PAYMENT": 16,
+      "UNKNOWN": 20
+    },
+    "by_difficulty": {
+      "obvious": 69,
+      "ambiguous": 29,
+      "contradictory": 11,
+      "adversarial": 11
+    },
+    "gold_decisions": {
+      "APPROVE_REFUND": 11,
+      "HUMAN_REVIEW": 38,
+      "EXPLAIN_CHARGE": 18,
+      "INVESTIGATE": 47,
+      "NO_ADDITIONAL_REFUND": 6
+    },
+    "gold_automated_rate": 0.2917
+  },
+  "policy_evaluations": {
+    "distinct_combinations": 33,
+    "failed": 0,
+    "gold_decision_failures": []
+  },
+  "providers": {
+    "anthropic": {
+      "misclassified_cases": [
+        {
+          "id": "B062",
+          "difficulty": "ambiguous",
+          "gold_intent": "REFUND_REQUEST",
+          "predicted_intent": "UNKNOWN",
+          "repeats": 3,
+          "gold_decision": "HUMAN_REVIEW",
+          "model_decision": "INVESTIGATE"
+        },
+        {
+          "id": "B092",
+          "difficulty": "ambiguous",
+          "gold_intent": "FAILED_PAYMENT",
+          "predicted_intent": "UNKNOWN",
+          "repeats": 3,
+          "gold_decision": "INVESTIGATE",
+          "model_decision": "INVESTIGATE"
+        }
+      ],
+      "model_versions": [
+        "claude-haiku-5-5"
+      ],
+      "calls": 360,
+      "expected_calls": 360,
+      "complete": true,
+      "repeats": 3,
+      "intent_accuracy": 0.9833,
+      "intent_accuracy_majority_vote": 0.9833,
+      "accuracy_by_difficulty": {
+        "adversarial": 1.0,
+        "ambiguous": 0.931,
+        "contradictory": 1.0,
+        "obvious": 1.0
+      },
+      "consistency_all_repeats_agree": 1.0,
+      "schema_valid_rate": 1.0,
+      "invalid_outputs": 0,
+      "error_rate": 0.0,
+      "errors": 0,
+      "policy_evaluation_failures": 0,
+      "decision_agreement_with_gold_policy": 0.9917,
+      "intent_errors": 6,
+      "intent_errors_with_same_decision": 3,
+      "correctly_automated_rate": 0.2917,
+      "escalation_rate": 0.7083,
+      "policy_violation_rate": 0.0,
+      "policy_violations": 0,
+      "model_latency_ms": {
+        "p50": 1193.8,
+        "p95": 1420.4,
+        "mean": 1192.3,
+        "n": 360
+      },
+      "usage_totals": {
+        "input_tokens": 248862,
+        "output_tokens": 8037
+      },
+      "estimated_cost_usd_total": 0.028905,
+      "estimated_cost_per_correct_automated_decision_usd": 0.00027529,
+      "confidence_reported_by_provider": false,
+      "accuracy_by_provider_confidence": null,
+      "confusion_matrix": {
+        "DUPLICATE_CHARGE_CLAIM": {
+          "DUPLICATE_CHARGE_CLAIM": 90,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "PRORATION_QUESTION": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 54,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "REFUND_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 63,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 3
+        },
+        "CANCELLATION_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 42,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "FAILED_PAYMENT": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 45,
+          "UNKNOWN": 3
+        },
+        "UNKNOWN": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 60
+        }
+      }
+    },
+    "typesafe": {
+      "misclassified_cases": [
+        {
+          "id": "B040",
+          "difficulty": "ambiguous",
+          "gold_intent": "PRORATION_QUESTION",
+          "predicted_intent": "UNKNOWN",
+          "repeats": 1,
+          "gold_decision": "EXPLAIN_CHARGE",
+          "model_decision": "INVESTIGATE"
+        },
+        {
+          "id": "B047",
+          "difficulty": "obvious",
+          "gold_intent": "PRORATION_QUESTION",
+          "predicted_intent": "UNKNOWN",
+          "repeats": 3,
+          "gold_decision": "EXPLAIN_CHARGE",
+          "model_decision": "INVESTIGATE"
+        },
+        {
+          "id": "B066",
+          "difficulty": "adversarial",
+          "gold_intent": "REFUND_REQUEST",
+          "predicted_intent": "UNKNOWN",
+          "repeats": 3,
+          "gold_decision": "HUMAN_REVIEW",
+          "model_decision": "INVESTIGATE"
+        },
+        {
+          "id": "B068",
+          "difficulty": "ambiguous",
+          "gold_intent": "REFUND_REQUEST",
+          "predicted_intent": "PRORATION_QUESTION",
+          "repeats": 3,
+          "gold_decision": "HUMAN_REVIEW",
+          "model_decision": "INVESTIGATE"
+        },
+        {
+          "id": "B081",
+          "difficulty": "ambiguous",
+          "gold_intent": "CANCELLATION_REQUEST",
+          "predicted_intent": "DUPLICATE_CHARGE_CLAIM",
+          "repeats": 3,
+          "gold_decision": "HUMAN_REVIEW",
+          "model_decision": "INVESTIGATE"
+        },
+        {
+          "id": "B092",
+          "difficulty": "ambiguous",
+          "gold_intent": "FAILED_PAYMENT",
+          "predicted_intent": "UNKNOWN",
+          "repeats": 3,
+          "gold_decision": "INVESTIGATE",
+          "model_decision": "INVESTIGATE"
+        },
+        {
+          "id": "B108",
+          "difficulty": "obvious",
+          "gold_intent": "UNKNOWN",
+          "predicted_intent": "REFUND_REQUEST",
+          "repeats": 3,
+          "gold_decision": "INVESTIGATE",
+          "model_decision": "HUMAN_REVIEW"
+        }
+      ],
+      "model_versions": [
+        "jev-1.14.0"
+      ],
+      "calls": 360,
+      "expected_calls": 360,
+      "complete": true,
+      "repeats": 3,
+      "intent_accuracy": 0.9472,
+      "intent_accuracy_majority_vote": 0.95,
+      "accuracy_by_difficulty": {
+        "adversarial": 0.9091,
+        "ambiguous": 0.8851,
+        "contradictory": 1.0,
+        "obvious": 0.971
+      },
+      "consistency_all_repeats_agree": 0.9917,
+      "schema_valid_rate": 1.0,
+      "invalid_outputs": 0,
+      "error_rate": 0.0,
+      "errors": 0,
+      "policy_evaluation_failures": 0,
+      "decision_agreement_with_gold_policy": 0.9556,
+      "intent_errors": 19,
+      "intent_errors_with_same_decision": 3,
+      "correctly_automated_rate": 0.2806,
+      "escalation_rate": 0.7194,
+      "policy_violation_rate": 0.0,
+      "policy_violations": 0,
+      "model_latency_ms": {
+        "p50": 58.8,
+        "p95": 82.3,
+        "mean": 62.7,
+        "n": 360
+      },
+      "usage_totals": {
+        "input_tokens": 197145,
+        "output_tokens": 30588
+      },
+      "estimated_cost_usd_total": 0.00828,
+      "estimated_cost_per_correct_automated_decision_usd": 8.198e-05,
+      "confidence_reported_by_provider": true,
+      "accuracy_by_provider_confidence": {
+        "[0.00,0.50]": {
+          "n": 9,
+          "accuracy": 0.3333
+        },
+        "[0.50,0.80]": {
+          "n": 39,
+          "accuracy": 0.8205
+        },
+        "[0.80,0.95]": {
+          "n": 63,
+          "accuracy": 0.9365
+        },
+        "[0.95,1.00]": {
+          "n": 249,
+          "accuracy": 0.992
+        }
+      },
+      "confusion_matrix": {
+        "DUPLICATE_CHARGE_CLAIM": {
+          "DUPLICATE_CHARGE_CLAIM": 90,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "PRORATION_QUESTION": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 50,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 4
+        },
+        "REFUND_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 3,
+          "REFUND_REQUEST": 60,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 3
+        },
+        "CANCELLATION_REQUEST": {
+          "DUPLICATE_CHARGE_CLAIM": 3,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 39,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 0
+        },
+        "FAILED_PAYMENT": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 0,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 45,
+          "UNKNOWN": 3
+        },
+        "UNKNOWN": {
+          "DUPLICATE_CHARGE_CLAIM": 0,
+          "PRORATION_QUESTION": 0,
+          "REFUND_REQUEST": 3,
+          "CANCELLATION_REQUEST": 0,
+          "FAILED_PAYMENT": 0,
+          "UNKNOWN": 57
+        }
+      }
+    }
+  },
+  "workflow": {
+    "claude": {
+      "runs": 24,
+      "completed": 24,
+      "failed_or_incomplete": 0,
+      "not_started_client_error": 0,
+      "started_not_completed": 0,
+      "failures": [],
+      "model_intent_accuracy": 1.0,
+      "model_intent_accuracy_completed_runs": 1.0,
+      "workflow_decision_agreement_with_gold_policy": 1.0,
+      "workflow_decision_agreement_completed_runs": 1.0,
+      "workflow_ms": {
+        "p50": 1921.0,
+        "p95": 3121.3,
+        "n": 24
+      },
+      "classify_task_ms_p50": 1295.5,
+      "facts_task_ms_p50": 79.0,
+      "business_rule_task_ms_p50": 8.5,
+      "in_workflow_model_latency_ms_p50": 1217.9,
+      "estimated_model_cost_usd": 0.002001
+    },
+    "jev": {
+      "runs": 24,
+      "completed": 22,
+      "failed_or_incomplete": 2,
+      "not_started_client_error": 2,
+      "started_not_completed": 0,
+      "failures": [
+        {
+          "id": "B013",
+          "workflowId": null,
+          "status": "ERROR",
+          "error": "URLError: <urlopen error _ssl.c:994: The handshake operation timed out>"
+        },
+        {
+          "id": "B014",
+          "workflowId": null,
+          "status": "ERROR",
+          "error": "URLError: <urlopen error _ssl.c:994: The handshake operation timed out>"
+        }
+      ],
+      "model_intent_accuracy": 0.875,
+      "model_intent_accuracy_completed_runs": 0.9545,
+      "workflow_decision_agreement_with_gold_policy": 0.875,
+      "workflow_decision_agreement_completed_runs": 0.9545,
+      "workflow_ms": {
+        "p50": 749.5,
+        "p95": 1338.2,
+        "n": 22
+      },
+      "classify_task_ms_p50": 139.5,
+      "facts_task_ms_p50": 80.0,
+      "business_rule_task_ms_p50": 9.0,
+      "in_workflow_model_latency_ms_p50": 59.6,
+      "estimated_model_cost_usd": 0.00051
+    },
+    "rules": {
+      "runs": 24,
+      "completed": 24,
+      "failed_or_incomplete": 0,
+      "not_started_client_error": 0,
+      "started_not_completed": 0,
+      "failures": [],
+      "model_intent_accuracy": null,
+      "model_intent_accuracy_completed_runs": null,
+      "workflow_decision_agreement_with_gold_policy": 1.0,
+      "workflow_decision_agreement_completed_runs": 1.0,
+      "workflow_ms": {
+        "p50": 343.5,
+        "p95": 718.3,
+        "n": 24
+      },
+      "classify_task_ms_p50": null,
+      "facts_task_ms_p50": 79.0,
+      "business_rule_task_ms_p50": 9.0,
+      "in_workflow_model_latency_ms_p50": null,
+      "estimated_model_cost_usd": 0.0
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "step": "pre",
+  "at_utc": "2026-11-21T02:30:41+00:00",
+  "stripe_account": "acct_1UdzTR40CXDSlSkI",
+  "scenario": "S9",
+  "customer": "cus_VfOmr2BhyLnwC2",
+  "facts": {
+    "factsStatus": "VERIFIED",
+    "duplicateVerified": "YES",
+    "duplicateRefundableCents": 1200,
+    "duplicateChargeId": "ch_3Ue3zQ40CXDSlSkI0l7iQJXL",
+    "alreadyRefunded": "NO"
+  },
+  "state": {
+    "charge": "ch_3Ue3zQ40CXDSlSkI0l7iQJXL",
+    "livemode": false,
+    "customer": "cus_VfOmr2BhyLnwC2",
+    "amount": 1200,
+    "currency": "usd",
+    "amount_refunded": 0,
+    "refunded": false,
+    "refunds": []
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "step": "post",
+  "at_utc": "2026-11-21T02:31:32+00:00",
+  "stripe_account": "acct_1UdzTR40CXDSlSkI",
+  "scenario": "S9",
+  "customer": "cus_VfOmr2BhyLnwC2",
+  "facts": {
+    "factsStatus": "VERIFIED",
+    "duplicateVerified": "YES",
+    "duplicateRefundableCents": 0,
+    "duplicateChargeId": "ch_3Ue3zQ40CXDSlSkI0l7iQJXL",
+    "alreadyRefunded": "YES"
+  },
+  "state": {
+    "charge": "ch_3Ue3zQ40CXDSlSkI0l7iQJXL",
+    "livemode": false,
+    "customer": "cus_VfOmr2BhyLnwC2",
+    "amount": 1200,
+    "currency": "usd",
+    "amount_refunded": 1200,
+    "refunded": true,
+    "refunds": [
+      {
+        "id": "re_3Ue3zQ40CXDSlSkI0e4DI4Y5",
+        "amount": 1200,
+        "status": "succeeded",
+        "reason": "duplicate",
+        "metadata": {
+          "osd_case_id": "S9",
+          "osd_policy_version": "billing-support-policy/v1",
+          "osd_project": "orkes-stripe-decisions",
+          "osd_refund_key": "osd-refund-070cbe331882aca7702edf67",
+          "osd_rule_id": "R07"
+        }
+      }
+    ]
+  },
+  "worker_replay": {
+    "executed": false,
+    "dryRun": false,
+    "refundId": "re_3Ue3zQ40CXDSlSkI0e4DI4Y5",
+    "idempotencyKey": "osd-refund-070cbe331882aca7702edf67",
+    "status": "ALREADY_EXECUTED",
+    "reason": "refund with this idempotency key already exists"
+  },
+  "stripe_idempotent_replay": {
+    "returned_refund": "re_3Ue3zQ40CXDSlSkI0e4DI4Y5",
+    "same_as_original": true
+  },
+  "state_after_replays": {
+    "charge": "ch_3Ue3zQ40CXDSlSkI0l7iQJXL",
+    "livemode": false,
+    "customer": "cus_VfOmr2BhyLnwC2",
+    "amount": 1200,
+    "currency": "usd",
+    "amount_refunded": 1200,
+    "refunded": true,
+    "refunds": [
+      {
+        "id": "re_3Ue3zQ40CXDSlSkI0e4DI4Y5",
+        "amount": 1200,
+        "status": "succeeded",
+        "reason": "duplicate",
+        "metadata": {
+          "osd_case_id": "S9",
+          "osd_policy_version": "billing-support-policy/v1",
+          "osd_project": "orkes-stripe-decisions",
+          "osd_refund_key": "osd-refund-070cbe331882aca7702edf67",
+          "osd_rule_id": "R07"
+        }
+      }
+    ]
+  },
+  "checks": {
+    "exactly_one_refund": true,
+    "refund_succeeded": true,
+    "amount_refunded_1200": true,
+    "worker_replay_already_executed": true,
+    "stripe_replay_same_refund": true,
+    "test_mode": true
+  }
+}

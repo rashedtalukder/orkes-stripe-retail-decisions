@@ -23,7 +23,7 @@ identifies existing objects by querying Stripe (custom product IDs, price `looku
 ```bash
 uv run --env-file .env python -m stripe_decisions stripe-whoami   # must show livemode: false
 uv run --env-file .env python -m stripe_decisions seed            # safe to re-run
-uv run --env-file .env python -m stripe_decisions verify-seed     # 8/8 expected
+uv run --env-file .env python -m stripe_decisions verify-seed     # 9/9 expected (S1-S8 demo, S9 refund target)
 ```
 
 ## What gets created (all tagged `metadata.osd_project=orkes-stripe-decisions`)
@@ -44,6 +44,7 @@ uv run --env-file .env python -m stripe_decisions verify-seed     # 8/8 expected
 | S6 ambiguous | test clock, Starter subscription, paid | nothing anomalous |
 | S7 goodwill | test clock, Pro subscription, paid | nothing anomalous (request $15 lives in the case) |
 | S8 contradictory | one succeeded $49 PaymentIntent, one `pm_card_chargeDeclined` attempt for $49 | 1 succeeded, 1 failed charge, no duplicate |
+| S9 refund target (not in the demo) | 2 succeeded $12 PaymentIntents, same billing ref | duplicate YES; refunded once during [refund verification](refund-verification.md) |
 
 Every scenario uses real API objects; none needed a synthetic stand-in. `verify-seed --write-fixtures` snapshots the
 normalized facts to `fixtures/facts/S*.json` with provenance, for offline use.

@@ -23,6 +23,8 @@ EXPECTED_FACTS: dict[str, dict] = {
     "S6": {"factsStatus": "VERIFIED", "duplicateVerified": "NO", "prorationPresent": "NO", "paymentFailed": "NO", "alreadyRefunded": "NO"},
     "S7": {"factsStatus": "VERIFIED", "duplicateVerified": "NO", "prorationPresent": "NO", "paymentFailed": "NO", "alreadyRefunded": "NO"},
     "S8": {"factsStatus": "VERIFIED", "duplicateVerified": "NO", "prorationPresent": "NO", "paymentFailed": "NO"},
+    # S9 starts eligible; after the one verification refund its duplicate charge is fully refunded.
+    "S9": {"factsStatus": "VERIFIED", "duplicateVerified": "YES", "duplicateChargeIdPresent": True},
 }
 EXPECTED_EVIDENCE: dict[str, dict] = {
     "S8": {"succeededCharges": 1, "failedCharges": 1},
@@ -36,8 +38,10 @@ def verify_seed(write_fixtures: bool = False) -> dict:
     for sid, scen in sorted(manifest["scenarios"].items()):
         facts = fetch_stripe_facts(scen["customer"], requested_cents=scen.get("requestedCents", 0))
         got = facts.model_dump(mode="json")
-        mismatches = {k: {"expected": v, "actual": got.get(k)} for k, v in EXPECTED_FACTS.get(sid, {}).items()
-                      if got.get(k) != v}
+        exp = dict(EXPECTED_FACTS.get(sid, {}))
+        if exp.pop("duplicateChargeIdPresent", False) and not got.get("duplicateChargeId"):
+            exp["duplicateChargeId"] = "<present>"
+        mismatches = {k: {"expected": v, "actual": got.get(k)} for k, v in exp.items() if got.get(k) != v}
         mismatches.update({f"evidence.{k}": {"expected": v, "actual": got["evidence"].get(k)}
                            for k, v in EXPECTED_EVIDENCE.get(sid, {}).items() if got["evidence"].get(k) != v})
         results[sid] = {"title": scen["title"], "customer": scen["customer"], "ok": not mismatches,

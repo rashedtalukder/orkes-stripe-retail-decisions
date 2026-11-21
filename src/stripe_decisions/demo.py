@@ -49,7 +49,10 @@ def run_demo(mode: str, scenario: str | None = None, offline: bool = False, dry_
               "matched": sum(r["decision"] == r["expected"] for r in rows), "total": len(rows)}
     out_dir = RESULTS_DIR / "demo"
     out_dir.mkdir(parents=True, exist_ok=True)
-    path = out_dir / f"demo-{mode}{'-fixtures' if offline else ''}.json"
+    suffix = (f"-{scenario}" if scenario else "") + ("-fixtures" if offline else "") + ("" if dry_run else "-executed")
+    path = out_dir / f"demo-{mode}{suffix}.json"
+    if not dry_run and path.exists():  # keep every real-mutation run, never overwrite the evidence
+        path = out_dir / f"demo-{mode}{suffix}-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.json"
     path.write_text(json.dumps(report, indent=2, default=str) + "\n")
     print(f"{report['matched']}/{report['total']} matched expected decisions; wrote {path.relative_to(RESULTS_DIR.parent)}")
     return report

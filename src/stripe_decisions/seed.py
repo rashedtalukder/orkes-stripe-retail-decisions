@@ -41,6 +41,10 @@ SCENARIOS: dict[str, dict[str, Any]] = {
     "S6": {"title": "Ambiguous billing complaint", "expected_decision": "INVESTIGATE", "claimType": "UNKNOWN"},
     "S7": {"title": "Goodwill credit request", "expected_decision": "HUMAN_REVIEW", "claimType": "REFUND_REQUEST", "requestedCents": 1500},
     "S8": {"title": "Contradictory evidence (one success, one decline)", "expected_decision": "INVESTIGATE", "claimType": "DUPLICATE_CHARGE_CLAIM"},
+    # Not part of the demo: a dedicated, eligible duplicate used ONLY to verify guarded sandbox refund execution,
+    # so refunding it never changes the 8 demo scenarios.
+    "S9": {"title": "Refund-execution target (small verified duplicate)", "expected_decision": "APPROVE_REFUND",
+           "claimType": "DUPLICATE_CHARGE_CLAIM", "demo": False},
 }
 
 
@@ -261,6 +265,7 @@ class Seeder:
             "S6": lambda: self.seed_subscription_only("S6", "starter"),
             "S7": lambda: self.seed_subscription_only("S7", "pro"),
             "S8": self.seed_s8_contradictory,
+            "S9": lambda: self.seed_duplicate("S9", 1200, "Orkes Demo Co extra storage add-on (refund verification)"),
         }
         for sid, build in builders.items():
             self.log(f"--- {sid}: {SCENARIOS[sid]['title']}")

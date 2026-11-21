@@ -2,7 +2,7 @@
 
 import hashlib
 import json
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import pytest
@@ -204,3 +204,55 @@ def test_workflow_failures_are_attributed():
     assert w["not_started_client_error"] == 1 and w["started_not_completed"] == 0
     assert w["model_intent_accuracy"] == 0.5 and w["model_intent_accuracy_completed_runs"] == 1.0
     assert w["failures"][0]["error"].startswith("URLError")
+
+
+# ---------- statistics and cross-model analysis ----------
+def test_wilson_and_mcnemar_reference_values():
+    assert bm.wilson_ci(0, 0) is None
+    lo, hi = bm.wilson_ci(50, 100)
+    assert lo == pytest.approx(0.4038, abs=1e-3) and hi == pytest.approx(0.5962, abs=1e-3)
+    assert bm.mcnemar_exact(0, 0) is None
+    assert bm.mcnemar_exact(5, 1) == pytest.approx(0.2188, abs=1e-3)  # 2 * 7/64
+    assert bm.mcnemar_exact(10, 0) == pytest.approx(0.002, abs=1e-3)
+
+
+def test_p99_requires_enough_samples():
+    assert bm.p99(list(range(99))) is None
+    assert bm.p99([float(x) for x in range(1, 101)]) == pytest.approx(99.01, abs=0.05)
+
+
+def test_cross_model_disagreements_and_category_breakdown():
+    decided = {("S1", "DUPLICATE_CHARGE_CLAIM", 0): ok("APPROVE_REFUND"), ("S1", "UNKNOWN", 0): ok("INVESTIGATE"),
+               ("S7", "REFUND_REQUEST", 1500): ok("HUMAN_REVIEW")}
+    cls = [row("a", 1, "B001", "DUPLICATE_CHARGE_CLAIM", "DUPLICATE_CHARGE_CLAIM"),
+           row("a", 1, "B002", "REFUND_REQUEST", "REFUND_REQUEST", "adversarial"),
+           row("b", 1, "B001", "UNKNOWN", "DUPLICATE_CHARGE_CLAIM"),
+           row("b", 1, "B002", "REFUND_REQUEST", "REFUND_REQUEST", "adversarial")]
+    rep = bm.summarize(cls, decided, DS, [], {})
+    c = rep["comparison"]
+    assert c["only_a_correct"] == ["B001"] and c["only_b_correct"] == []
+    assert len(c["disagreements"]) == 1 and c["disagreements"][0]["b_decision"] == "INVESTIGATE"
+    assert rep["providers"]["b"]["by_category"]["obvious"]["intent_accuracy"] == 0.0
+    assert rep["providers"]["b"]["by_category"]["adversarial"]["decision_agreement"] == 1.0
+    assert rep["providers"]["a"]["estimated_cost_per_evaluated_call_usd"] == pytest.approx(0.001)
+
+
+def test_all_modes_get_identical_case_inputs_in_workflow_phase(tmp_path):
+    seen = []
+
+    class Recorder:
+        def execute(self, name, version, inp, wait_seconds=30):
+            seen.append((name, inp))
+            return {"workflowId": f"w{len(seen)}", "status": "COMPLETED"}
+
+        def wait_for(self, wid, timeout):
+            return {"status": "COMPLETED", "startTime": 0, "endTime": 10, "tasks": [], "output": {}}
+
+    bm.run_workflow_sample(["jev", "claude"], DS, tmp_path, api=Recorder())
+    by_mode = defaultdict(list)
+    for name, inp in seen:
+        mode = inp.get("classifier", "rules")
+        case = {k: v for k, v in inp["case"].items() if k not in ("claimType", "message")}
+        by_mode[mode].append((case, inp["factsSource"], inp["fixtureId"], inp["dryRun"]))
+    assert by_mode["rules"] == by_mode["jev"] == by_mode["claude"] and len(by_mode["rules"]) == len(DS)
+    assert all(d is True for *_, d in by_mode["rules"])  # benchmark never executes refunds

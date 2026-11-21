@@ -13,6 +13,7 @@ MESSAGES = {
     "S6": "Something seems wrong with my bill.",
     "S7": "The app was down for a few hours last week. Could you give me a $15 credit as a courtesy?",
     "S8": "You charged me twice for my Pro plan, I can see two attempts on my card notifications!",
+    "S9": "I was billed $12 twice for the extra storage add-on today.",
 }
 
 
@@ -22,6 +23,8 @@ def demo_cases(scenario: str | None = None, offline: bool = False) -> list[dict]
     for sid, meta in SCENARIOS.items():
         if scenario and sid != scenario:
             continue
+        if not scenario and meta.get("demo") is False:
+            continue  # e.g. S9, the refund-execution target, runs only when named explicitly
         customer = manifest["scenarios"][sid]["customer"] if manifest else "cus_fixture" + sid
         out.append({
             "scenario": sid, "title": meta["title"], "expected_decision": meta["expected_decision"],

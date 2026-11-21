@@ -72,6 +72,27 @@ confidence buckets, which is a within-provider check of whether that number trac
 confidence or probabilities, and the adapter doesn't ask it to make one up, so no confidence analysis exists for
 Claude and no cross-provider confidence comparison is made. Neither field is used by the policy.
 
+## Statistics and what is (not) claimed
+
+- **Intervals**: 95% Wilson score intervals on proportions. Per-call intervals treat a case's 3 repeats as
+  independent, which they aren't, so they are optimistic. The per-case (majority-vote) interval is the conservative reading.
+- **Paired comparison**: an exact two-sided McNemar test on per-case majority correctness (cases only one model got
+  right). Official run: 5 vs 1 discordant cases, p = 0.22, which is **not significant**. No other significance claims are made.
+- **Latency percentiles**: p50 and p95 are always reported, with `n`. p99 is reported only when n ≥ 100 (model-only
+  phase, n = 360 per model). It is withheld for the 24-run workflow sample.
+- **Category results** (obvious 69, ambiguous 29, contradictory 11, adversarial 11 cases) are descriptive. The
+  11-case categories have wide intervals.
+
+## Results
+
+- Official run: [results/benchmark/report-20261121T022545Z.md](../results/benchmark/report-20261121T022545Z.md),
+  with charts `report-20261121T022545Z-{rates,categories,latency}.png` and raw rows in
+  `results/benchmark/raw/20261121T022545Z/`.
+- Completion: 360/360 calls per model, 33/33 policy evaluations, 72/72 workflow runs, 0 provider errors, 0 invalid outputs.
+- An earlier full run (`results/benchmark/earlier/`) with the same configuration had 2 Jev workflow runs that never
+  started because of a client TLS timeout to Orkes. It is kept for transparency. Its model-only results were close
+  (Jev 94.7%, Claude 98.3% intent accuracy).
+
 ## Cost ceiling
 
 `--max-cost-usd` is enforced before spending. A probe call per provider measures the per-call cost, and the run

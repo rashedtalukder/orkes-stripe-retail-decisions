@@ -353,6 +353,104 @@ def summarize(cls_rows: list[dict], decided: dict, dataset: list[dict], wf_rows:
                 "in_workflow_model_latency_ms_p50": pct([r["model_latency_ms"] for r in done if r.get("model_latency_ms") is not None], .5),
                 "estimated_model_cost_usd": round(sum(r.get("model_est_cost_usd") or 0 for r in rs), 6) if mode != "rules" else 0.0,
             }
+    return add_analysis(report, cls_rows, decided, dataset, wf_rows)
+
+
+# ---------------- statistics (descriptive; no significance claims beyond the explicit paired test) ----------------
+P99_MIN_N = 100  # p99 from fewer samples is just the max-ish value; report it as None below this
+
+
+def wilson_ci(k: int, n: int, z: float = 1.96) -> list[float] | None:
+    """95% Wilson score interval for a proportion. Repeats of one case are not independent, so for
+    per-call rates this is optimistic; per-case (majority) intervals are the conservative reading."""
+    if not n:
+        return None
+    p = k / n
+    den = 1 + z * z / n
+    centre = (p + z * z / (2 * n)) / den
+    half = z * ((p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5) / den
+    return [round(max(0.0, centre - half), 4), round(min(1.0, centre + half), 4)]
+
+
+def mcnemar_exact(b: int, c: int) -> float | None:
+    """Two-sided exact McNemar p-value on discordant pairs (b: only A correct, c: only B correct)."""
+    from math import comb
+    n = b + c
+    if n == 0:
+        return None
+    k = min(b, c)
+    return round(min(1.0, 2 * sum(comb(n, i) for i in range(k + 1)) / 2 ** n), 4)
+
+
+def p99(values: list[float]) -> float | None:
+    return pct(values, 0.99) if len(values) >= P99_MIN_N else None
+
+
+def add_analysis(report: dict, cls_rows: list[dict], decided: dict, dataset: list[dict], wf_rows: list[dict]) -> dict:
+    by_id = {r["id"]: r for r in dataset}
+
+    def dec(row, intent):
+        d = decided.get((row["facts_fixture"], intent, row["requestedCents"]), {})
+        return d.get("decision") if d.get("ok") else None
+
+    gold_dec = {i: dec(r, r["gold_intent"]) for i, r in by_id.items()}
+    majority: dict[str, dict[str, str]] = {}
+    for provider, p in report["providers"].items():
+        rows = [r for r in cls_rows if r["provider"] == provider]
+        n = len(rows)
+        correct = sum(r["intent"] == r["gold_intent"] for r in rows)
+        agree = sum(dec(by_id[r["id"]], r["intent"]) is not None and dec(by_id[r["id"]], r["intent"]) == gold_dec[r["id"]] for r in rows)
+        p["intent_accuracy_ci95"] = wilson_ci(correct, n)
+        p["decision_agreement_ci95"] = wilson_ci(agree, n)
+        by_case: dict[str, list[str]] = defaultdict(list)
+        for r in rows:
+            by_case[r["id"]].append(r["intent"])
+        majority[provider] = {i: Counter(v).most_common(1)[0][0] for i, v in by_case.items()}
+        maj_ok = sum(majority[provider][i] == by_id[i]["gold_intent"] for i in majority[provider])
+        p["intent_accuracy_majority_ci95"] = wilson_ci(maj_ok, len(majority[provider]))
+        cats = {}
+        for d in DIFFICULTIES:
+            rs = [r for r in rows if r["difficulty"] == d]
+            k = sum(r["intent"] == r["gold_intent"] for r in rs)
+            a = sum(dec(by_id[r["id"]], r["intent"]) is not None and dec(by_id[r["id"]], r["intent"]) == gold_dec[r["id"]] for r in rs)
+            v = sum(PERMISSIVENESS.get(dec(by_id[r["id"]], r["intent"]), 0) > PERMISSIVENESS.get(gold_dec[r["id"]], 0) for r in rs)
+            cats[d] = {"cases": len({r["id"] for r in rs}), "calls": len(rs), "intent_correct": k,
+                       "intent_accuracy": rate(k, len(rs)), "intent_accuracy_ci95": wilson_ci(k, len(rs)),
+                       "decision_agree": a, "decision_agreement": rate(a, len(rs)), "policy_violations": v,
+                       "invalid_outputs": sum(not r["schemaValid"] for r in rs), "errors": sum(bool(r.get("error")) for r in rs)}
+        p["by_category"] = cats
+        lat = [r["latencyMs"] for r in rows if not r.get("error")]
+        p["model_latency_ms"]["p99"] = p99(lat)
+        p["model_latency_ms"]["p99_min_n"] = P99_MIN_N
+        total = p.get("estimated_cost_usd_total")
+        p["estimated_cost_per_evaluated_call_usd"] = round(total / n, 8) if total and n else None
+        p["estimated_cost_per_case_all_repeats_usd"] = round(total / len(by_case), 8) if total and by_case else None
+    names = sorted(majority)
+    if len(names) == 2:
+        a, b = names
+        only_a = sorted(i for i in by_id if majority[a].get(i) == by_id[i]["gold_intent"] != majority[b].get(i))
+        only_b = sorted(i for i in by_id if majority[b].get(i) == by_id[i]["gold_intent"] != majority[a].get(i))
+        dis = []
+        for i in sorted(by_id):
+            ia, ib = majority[a].get(i), majority[b].get(i)
+            if ia != ib:
+                dis.append({"id": i, "difficulty": by_id[i]["difficulty"], "message": by_id[i]["message"],
+                            "facts_fixture": by_id[i]["facts_fixture"], "gold_intent": by_id[i]["gold_intent"],
+                            "gold_decision": gold_dec[i], f"{a}_intent": ia, f"{a}_decision": dec(by_id[i], ia),
+                            f"{b}_intent": ib, f"{b}_decision": dec(by_id[i], ib)})
+        report["comparison"] = {
+            "unit": "case, majority intent over repeats",
+            "providers": names, "cases": len(by_id),
+            f"only_{a}_correct": only_a, f"only_{b}_correct": only_b,
+            "mcnemar_exact_p_two_sided": mcnemar_exact(len(only_a), len(only_b)),
+            "note": "Exact McNemar test on per-case majority correctness. With this few discordant cases, a p-value "
+                    "above 0.05 means the observed difference is not statistically significant on this dataset.",
+            "disagreements": dis,
+        }
+    for mode, w in (report.get("workflow") or {}).items():
+        ms = [r["workflow_ms"] for r in wf_rows if r["mode"] == mode and r["status"] == "COMPLETED" and r.get("workflow_ms") is not None]
+        w["workflow_ms"]["p99"] = p99(ms)
+        w["workflow_ms"]["p99_min_n"] = P99_MIN_N
     return report
 
 

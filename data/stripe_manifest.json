@@ -117,10 +117,25 @@
         "pi_3Ue2al40CXDSlSkI15japQzy"
       ],
       "title": "Contradictory evidence (one success, one decline)"
+    },
+    "S9": {
+      "charges": [
+        "ch_3Ue3zP40CXDSlSkI0ALDKJUD",
+        "ch_3Ue3zQ40CXDSlSkI0l7iQJXL"
+      ],
+      "claimType": "DUPLICATE_CHARGE_CLAIM",
+      "customer": "cus_VfOmr2BhyLnwC2",
+      "demo": false,
+      "expected_decision": "APPROVE_REFUND",
+      "payment_intents": [
+        "pi_3Ue3zP40CXDSlSkI0hoawXun",
+        "pi_3Ue3zQ40CXDSlSkI0mzFKUJI"
+      ],
+      "title": "Refund-execution target (small verified duplicate)"
     }
   },
   "seed_version": "seed-v1",
-  "seeded_at": "2026-11-21T00:57:00+00:00",
+  "seeded_at": "2026-11-21T02:25:21+00:00",
   "stripe_account": "acct_1UdzTR40CXDSlSkI",
   "stripe_display_name": "orkes-stripe-decisions"
 }

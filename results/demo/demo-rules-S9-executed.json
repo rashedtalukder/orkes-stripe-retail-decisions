@@ -1,0 +1,38 @@
+{
+  "mode": "rules",
+  "offline_facts": false,
+  "dryRun": false,
+  "ran_at": "2026-11-21T02:31:15.688977+00:00",
+  "server": "https://developer.orkescloud.com",
+  "rows": [
+    {
+      "scenario": "S9",
+      "title": "Refund-execution target (small verified duplicate)",
+      "workflow": "billing_rules_only",
+      "workflowId": "z8af9e2dfe4f-e553-11f1-8cb5-f617bd02df86",
+      "status": "COMPLETED",
+      "expected": "APPROVE_REFUND",
+      "decision": "APPROVE_REFUND",
+      "ruleId": "R07",
+      "policyVersion": "billing-support-policy/v1",
+      "intent": "DUPLICATE_CHARGE_CLAIM",
+      "intentSource": "structured_form_field",
+      "refund": {
+        "executed": true,
+        "dryRun": false,
+        "refundId": "re_3Ue3zQ40CXDSlSkI0e4DI4Y5",
+        "idempotencyKey": "osd-refund-070cbe331882aca7702edf67",
+        "status": "SUCCEEDED",
+        "reason": "refunded per R07 (billing-support-policy/v1)"
+      },
+      "classification": null,
+      "factsStatus": "VERIFIED",
+      "factsSource": "stripe",
+      "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
+      "clientWallMs": 3813.9,
+      "serverDurationMs": 2829
+    }
+  ],
+  "matched": 1,
+  "total": 1
+}

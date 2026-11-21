@@ -1,0 +1,127 @@
+{
+  "name": "billing_rules_only",
+  "description": "Rules only: structured billing case + verified Stripe facts -> native Business Rule -> permitted action. No model inference.",
+  "version": 1,
+  "schemaVersion": 2,
+  "ownerEmail": "orkes-stripe-decisions@example.com",
+  "restartable": true,
+  "timeoutPolicy": "TIME_OUT_WF",
+  "timeoutSeconds": 300,
+  "inputParameters": [
+    "case",
+    "factsSource",
+    "fixtureId",
+    "dryRun"
+  ],
+  "outputParameters": {
+    "caseId": "${workflow.input.case.caseId}",
+    "intentSource": "structured_form_field",
+    "intent": "${intent_ref.output.result}",
+    "facts": "${facts_ref.output}",
+    "ruleEngineResult": "${policy_ref.output.result}",
+    "decision": "${decision_ref.output.result}",
+    "refund": "${refund_ref.output}",
+    "ruleFileLocation": "${policy_ref.input.ruleFileLocation}"
+  },
+  "tasks": [
+    {
+      "name": "sd_fetch_billing_facts",
+      "taskReferenceName": "facts_ref",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "case": "${workflow.input.case}",
+        "factsSource": "${workflow.input.factsSource}",
+        "fixtureId": "${workflow.input.fixtureId}"
+      }
+    },
+    {
+      "name": "normalize_intent",
+      "taskReferenceName": "intent_ref",
+      "type": "JSON_JQ_TRANSFORM",
+      "inputParameters": {
+        "raw": "${workflow.input.case.claimType}",
+        "schemaValid": null,
+        "allowed": [
+          "DUPLICATE_CHARGE_CLAIM",
+          "PRORATION_QUESTION",
+          "REFUND_REQUEST",
+          "CANCELLATION_REQUEST",
+          "FAILED_PAYMENT",
+          "UNKNOWN"
+        ],
+        "queryExpression": ".raw as $r | .schemaValid as $v | if ((.allowed | any(. == $r)) and ($v == null or $v == true)) then $r else \"UNKNOWN\" end"
+      }
+    },
+    {
+      "name": "billing_support_policy",
+      "taskReferenceName": "policy_ref",
+      "type": "BUSINESS_RULE",
+      "description": "Native Orkes Business Rule. Policy billing-support-policy/v1, sha256 20606ec3c7cb",
+      "inputParameters": {
+        "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/UNPUBLISHED/rules/billing_support_policy.v1.csv",
+        "executionStrategy": "FIRE_FIRST",
+        "cacheTimeoutMinutes": 5,
+        "inputColumns": {
+          "factsStatus": "${facts_ref.output.factsStatus}",
+          "currency": "${facts_ref.output.currency}",
+          "intent": "${intent_ref.output.result}",
+          "alreadyRefunded": "${facts_ref.output.alreadyRefunded}",
+          "duplicateVerified": "${facts_ref.output.duplicateVerified}",
+          "duplicateRefundableCents": "${facts_ref.output.duplicateRefundableCents}",
+          "prorationPresent": "${facts_ref.output.prorationPresent}",
+          "paymentFailed": "${facts_ref.output.paymentFailed}",
+          "requestedCents": "${facts_ref.output.requestedCents}"
+        },
+        "outputColumns": [
+          "decision",
+          "allowedAction",
+          "ruleId",
+          "ruleDescription",
+          "policyVersion"
+        ]
+      }
+    },
+    {
+      "name": "finalize_decision",
+      "taskReferenceName": "decision_ref",
+      "type": "JSON_JQ_TRANSFORM",
+      "inputParameters": {
+        "r": "${policy_ref.output.result}",
+        "pv": "billing-support-policy/v1",
+        "queryExpression": ".r as $r | {decision: ($r.decision // \"HUMAN_REVIEW\"), allowedAction: ($r.allowedAction // \"ESCALATE_TO_HUMAN\"), ruleId: ($r.ruleId // \"NO_MATCH\"), ruleDescription: ($r.ruleDescription // \"No rule matched; safe default\"), policyVersion: ($r.policyVersion // .pv)}"
+      }
+    },
+    {
+      "name": "permitted_action",
+      "taskReferenceName": "action_ref",
+      "type": "SWITCH",
+      "evaluatorType": "value-param",
+      "expression": "decision",
+      "inputParameters": {
+        "decision": "${decision_ref.output.result.decision}"
+      },
+      "decisionCases": {
+        "APPROVE_REFUND": [
+          {
+            "name": "sd_execute_refund",
+            "taskReferenceName": "refund_ref",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "caseId": "${workflow.input.case.caseId}",
+              "customerId": "${workflow.input.case.customerId}",
+              "decision": "${decision_ref.output.result.decision}",
+              "ruleId": "${decision_ref.output.result.ruleId}",
+              "policyVersion": "${decision_ref.output.result.policyVersion}",
+              "chargeId": "${facts_ref.output.duplicateChargeId}",
+              "amountCents": "${facts_ref.output.duplicateRefundableCents}",
+              "currency": "${facts_ref.output.currency}",
+              "factsSource": "${facts_ref.output.factsSource}",
+              "dryRun": "${workflow.input.dryRun}"
+            }
+          }
+        ]
+      },
+      "defaultCase": []
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "_note": "List prices used for ESTIMATED cost. Verify before publishing; prices change. Cost = tokens x price; no discounts, batch, or caching assumed.",
+  "retrieved_at": "2026-11-20",
+  "typesafe": {
+    "jev-1.14.0": {"input_usd_per_mtok": 0.042, "output_usd_per_mtok": 0.0,
+                   "source": "https://typesafe.ai/pricing (Jev 1.14: $42 per billion input tokens; output tokens free)"}
+  },
+  "anthropic": {
+    "claude-haiku-5-5": {"input_usd_per_mtok": 0.10, "output_usd_per_mtok": 0.50,
+                         "source": "https://platform.claude.com/docs/en/about-claude/pricing (Claude Haiku 5.5, prompts up to 100,000 tokens)"}
+  }
+}

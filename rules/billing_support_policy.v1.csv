@@ -1,0 +1,21 @@
+factsStatus,currency,intent,alreadyRefunded,duplicateVerified,duplicateRefundableCents,prorationPresent,paymentFailed,requestedCents,decision,allowedAction,ruleId,ruleDescription,policyVersion
+ERROR,,,,,,,,,HUMAN_REVIEW,ESCALATE_TO_HUMAN,R01,Billing facts could not be retrieved; never decide without verified facts,billing-support-policy/v1
+CONFLICTING,,,,,,,,,INVESTIGATE,OPEN_INVESTIGATION,R02,Case references conflict with Stripe records,billing-support-policy/v1
+INSUFFICIENT,,,,,,,,,INVESTIGATE,OPEN_INVESTIGATION,R03,Insufficient financial evidence to act,billing-support-policy/v1
+VERIFIED,!= usd,,,,,,,,HUMAN_REVIEW,ESCALATE_TO_HUMAN,R04,Policy is only defined for USD,billing-support-policy/v1
+VERIFIED,usd,DUPLICATE_CHARGE_CLAIM,YES,,,,,,NO_ADDITIONAL_REFUND,NONE,R05,Payment already fully refunded,billing-support-policy/v1
+VERIFIED,usd,REFUND_REQUEST,YES,,,,,,NO_ADDITIONAL_REFUND,NONE,R06,Payment already fully refunded,billing-support-policy/v1
+VERIFIED,usd,DUPLICATE_CHARGE_CLAIM,NO,YES,<= 5000,,,,APPROVE_REFUND,REFUND_DUPLICATE_PAYMENT,R07,Verified duplicate payment at or under $50.00 is refunded automatically,billing-support-policy/v1
+VERIFIED,usd,DUPLICATE_CHARGE_CLAIM,NO,YES,> 5000,,,,HUMAN_REVIEW,ESCALATE_TO_HUMAN,R08,Verified duplicate payment over $50.00 requires human approval,billing-support-policy/v1
+VERIFIED,usd,DUPLICATE_CHARGE_CLAIM,NO,NO,,YES,,,EXPLAIN_CHARGE,SEND_EXPLANATION,R09,Second charge is a legitimate subscription proration,billing-support-policy/v1
+VERIFIED,usd,PRORATION_QUESTION,,,,YES,,,EXPLAIN_CHARGE,SEND_EXPLANATION,R10,Charge is a legitimate subscription proration,billing-support-policy/v1
+VERIFIED,usd,REFUND_REQUEST,NO,NO,,YES,,,EXPLAIN_CHARGE,SEND_EXPLANATION,R11,Disputed charge is a legitimate subscription proration,billing-support-policy/v1
+VERIFIED,usd,DUPLICATE_CHARGE_CLAIM,NO,NO,,NO,,,INVESTIGATE,OPEN_INVESTIGATION,R12,Customer claims a duplicate but Stripe shows no verified duplicate,billing-support-policy/v1
+VERIFIED,usd,,,,,,YES,,INVESTIGATE,OPEN_INVESTIGATION,R13,Failed payment on record; billing support follows up and no refund is issued,billing-support-policy/v1
+VERIFIED,usd,FAILED_PAYMENT,,,,,NO,,INVESTIGATE,OPEN_INVESTIGATION,R14,Customer reports a failed payment that Stripe does not show,billing-support-policy/v1
+VERIFIED,usd,REFUND_REQUEST,NO,NO,,NO,NO,<= 2000,HUMAN_REVIEW,ESCALATE_TO_HUMAN,R15,Goodwill request at or under $20.00 goes to human review,billing-support-policy/v1
+VERIFIED,usd,REFUND_REQUEST,NO,NO,,NO,NO,> 2000,HUMAN_REVIEW,ESCALATE_TO_HUMAN,R16,Goodwill request over $20.00 goes to human review,billing-support-policy/v1
+VERIFIED,usd,PRORATION_QUESTION,,,,NO,,,INVESTIGATE,OPEN_INVESTIGATION,R17,Proration question but no proration found,billing-support-policy/v1
+VERIFIED,usd,CANCELLATION_REQUEST,,,,,,,HUMAN_REVIEW,ESCALATE_TO_HUMAN,R18,Cancellation is handled by a person,billing-support-policy/v1
+VERIFIED,usd,UNKNOWN,,,,,,,INVESTIGATE,OPEN_INVESTIGATION,R19,Request intent is unclear; gather more information,billing-support-policy/v1
+,,,,,,,,,HUMAN_REVIEW,ESCALATE_TO_HUMAN,R99,No matching rule; safe default,billing-support-policy/v1

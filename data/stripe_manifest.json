@@ -1,0 +1,126 @@
+{
+  "livemode": false,
+  "plans": {
+    "business": {
+      "currency": "usd",
+      "lookup_key": "osd_business_monthly_usd",
+      "price": "price_1Ue2ZB40CXDSlSkI4Vu6j3BU",
+      "product": "osd_prod_business",
+      "unit_amount": 14900
+    },
+    "enterprise": {
+      "currency": "usd",
+      "lookup_key": "osd_enterprise_monthly_usd",
+      "price": "price_1Ue2ZC40CXDSlSkI293B8rvf",
+      "product": "osd_prod_enterprise",
+      "unit_amount": 49900
+    },
+    "pro": {
+      "currency": "usd",
+      "lookup_key": "osd_pro_monthly_usd",
+      "price": "price_1Ue2ZB40CXDSlSkIDZYUWqmW",
+      "product": "osd_prod_pro",
+      "unit_amount": 4900
+    },
+    "starter": {
+      "currency": "usd",
+      "lookup_key": "osd_starter_monthly_usd",
+      "price": "price_1Ue2ZA40CXDSlSkIxBwmP7XB",
+      "product": "osd_prod_starter",
+      "unit_amount": 1900
+    }
+  },
+  "scenarios": {
+    "S1": {
+      "charges": [
+        "ch_3Ue2ZE40CXDSlSkI1OjD9h74",
+        "ch_3Ue2ZS40CXDSlSkI0IYMiuiI"
+      ],
+      "claimType": "DUPLICATE_CHARGE_CLAIM",
+      "customer": "cus_VfNJq45bB1FZ5v",
+      "expected_decision": "APPROVE_REFUND",
+      "payment_intents": [
+        "pi_3Ue2ZE40CXDSlSkI1T9a820u",
+        "pi_3Ue2ZS40CXDSlSkI0SyN1MIR"
+      ],
+      "title": "Small verified duplicate payment"
+    },
+    "S2": {
+      "charges": [
+        "ch_3Ue2ZV40CXDSlSkI0XiT4MGY",
+        "ch_3Ue2ZW40CXDSlSkI0NQRyNKs"
+      ],
+      "claimType": "DUPLICATE_CHARGE_CLAIM",
+      "customer": "cus_VfNKDysW30Qp7h",
+      "expected_decision": "HUMAN_REVIEW",
+      "payment_intents": [
+        "pi_3Ue2ZV40CXDSlSkI0HBJXUKr",
+        "pi_3Ue2ZW40CXDSlSkI0Sh21hAc"
+      ],
+      "title": "Large verified duplicate payment"
+    },
+    "S3": {
+      "claimType": "DUPLICATE_CHARGE_CLAIM",
+      "customer": "cus_VfNKlRwMkJcnz1",
+      "expected_decision": "EXPLAIN_CHARGE",
+      "subscription": "sub_1Ue2ZY40CXDSlSkIKLGXn6oi",
+      "test_clock": "clock_1Ue2ZW40CXDSlSkIwsK0MEuH",
+      "title": "Legitimate subscription proration"
+    },
+    "S4": {
+      "claimType": "FAILED_PAYMENT",
+      "customer": "cus_VfNKyKerTZYRhr",
+      "expected_decision": "INVESTIGATE",
+      "subscription": "sub_1Ue2Zk40CXDSlSkI9k1QyhVf",
+      "test_clock": "clock_1Ue2Zi40CXDSlSkIDN3UuxnT",
+      "title": "Failed renewal payment"
+    },
+    "S5": {
+      "charges": [
+        "ch_3Ue2aB40CXDSlSkI0a1uoKGL"
+      ],
+      "claimType": "REFUND_REQUEST",
+      "customer": "cus_VfNK1ApJsccxA1",
+      "expected_decision": "NO_ADDITIONAL_REFUND",
+      "payment_intents": [
+        "pi_3Ue2aB40CXDSlSkI0WhDpHva"
+      ],
+      "refund": "re_3Ue2aB40CXDSlSkI0IBlfgOp",
+      "title": "Previously refunded payment"
+    },
+    "S6": {
+      "claimType": "UNKNOWN",
+      "customer": "cus_VfNKBk721TdQuL",
+      "expected_decision": "INVESTIGATE",
+      "subscription": "sub_1Ue2aG40CXDSlSkIeoGRF7NU",
+      "test_clock": "clock_1Ue2aE40CXDSlSkIhvDj3Q25",
+      "title": "Ambiguous billing complaint"
+    },
+    "S7": {
+      "claimType": "REFUND_REQUEST",
+      "customer": "cus_VfNKeG0jFvfv3j",
+      "expected_decision": "HUMAN_REVIEW",
+      "requestedCents": 1500,
+      "subscription": "sub_1Ue2aK40CXDSlSkI2p7qjk7G",
+      "test_clock": "clock_1Ue2aI40CXDSlSkIl4Gv3SyO",
+      "title": "Goodwill credit request"
+    },
+    "S8": {
+      "charges": [
+        "ch_3Ue2aO40CXDSlSkI0Drec2xa"
+      ],
+      "claimType": "DUPLICATE_CHARGE_CLAIM",
+      "customer": "cus_VfNLd9USNRI7f7",
+      "expected_decision": "INVESTIGATE",
+      "payment_intents": [
+        "pi_3Ue2aO40CXDSlSkI0CADAbVD",
+        "pi_3Ue2al40CXDSlSkI15japQzy"
+      ],
+      "title": "Contradictory evidence (one success, one decline)"
+    }
+  },
+  "seed_version": "seed-v1",
+  "seeded_at": "2026-11-21T00:57:00+00:00",
+  "stripe_account": "acct_1UdzTR40CXDSlSkI",
+  "stripe_display_name": "orkes-stripe-decisions"
+}

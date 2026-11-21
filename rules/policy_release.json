@@ -1,0 +1,7 @@
+{
+  "policy_version": "billing-support-policy/v1",
+  "rule_file": "rules/billing_support_policy.v1.csv",
+  "sha256": "20606ec3c7cbbc1097cab7cdf414ae90832d7703c85cfe105d1cd092477306c7",
+  "commit": null,
+  "url": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/UNPUBLISHED/rules/billing_support_policy.v1.csv"
+}

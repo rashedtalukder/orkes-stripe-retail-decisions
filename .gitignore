@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.env.local
+*.secret
+# Raw provider responses and local run artifacts can contain message text; keep out of git by default.
+results/raw/
+results/runs/
+.DS_Store

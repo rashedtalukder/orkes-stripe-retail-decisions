@@ -1,0 +1,79 @@
+{
+  "name": "billing_policy_eval",
+  "description": "Benchmark helper: evaluate the SAME pinned Business Rule on supplied (frozen) facts + intent. No side effects.",
+  "version": 1,
+  "schemaVersion": 2,
+  "ownerEmail": "orkes-stripe-decisions@example.com",
+  "restartable": true,
+  "timeoutPolicy": "TIME_OUT_WF",
+  "timeoutSeconds": 300,
+  "inputParameters": [
+    "facts",
+    "intent"
+  ],
+  "outputParameters": {
+    "intent": "${intent_ref.output.result}",
+    "ruleEngineResult": "${policy_ref.output.result}",
+    "decision": "${decision_ref.output.result}",
+    "ruleFileLocation": "${policy_ref.input.ruleFileLocation}"
+  },
+  "tasks": [
+    {
+      "name": "normalize_intent",
+      "taskReferenceName": "intent_ref",
+      "type": "JSON_JQ_TRANSFORM",
+      "inputParameters": {
+        "raw": "${workflow.input.intent}",
+        "schemaValid": null,
+        "allowed": [
+          "DUPLICATE_CHARGE_CLAIM",
+          "PRORATION_QUESTION",
+          "REFUND_REQUEST",
+          "CANCELLATION_REQUEST",
+          "FAILED_PAYMENT",
+          "UNKNOWN"
+        ],
+        "queryExpression": ".raw as $r | .schemaValid as $v | if ((.allowed | any(. == $r)) and ($v == null or $v == true)) then $r else \"UNKNOWN\" end"
+      }
+    },
+    {
+      "name": "billing_support_policy",
+      "taskReferenceName": "policy_ref",
+      "type": "BUSINESS_RULE",
+      "description": "Native Orkes Business Rule. Policy billing-support-policy/v1, sha256 20606ec3c7cb",
+      "inputParameters": {
+        "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/UNPUBLISHED/rules/billing_support_policy.v1.csv",
+        "executionStrategy": "FIRE_FIRST",
+        "cacheTimeoutMinutes": 5,
+        "inputColumns": {
+          "factsStatus": "${workflow.input.facts.factsStatus}",
+          "currency": "${workflow.input.facts.currency}",
+          "intent": "${intent_ref.output.result}",
+          "alreadyRefunded": "${workflow.input.facts.alreadyRefunded}",
+          "duplicateVerified": "${workflow.input.facts.duplicateVerified}",
+          "duplicateRefundableCents": "${workflow.input.facts.duplicateRefundableCents}",
+          "prorationPresent": "${workflow.input.facts.prorationPresent}",
+          "paymentFailed": "${workflow.input.facts.paymentFailed}",
+          "requestedCents": "${workflow.input.facts.requestedCents}"
+        },
+        "outputColumns": [
+          "decision",
+          "allowedAction",
+          "ruleId",
+          "ruleDescription",
+          "policyVersion"
+        ]
+      }
+    },
+    {
+      "name": "finalize_decision",
+      "taskReferenceName": "decision_ref",
+      "type": "JSON_JQ_TRANSFORM",
+      "inputParameters": {
+        "r": "${policy_ref.output.result}",
+        "pv": "billing-support-policy/v1",
+        "queryExpression": ".r as $r | {decision: ($r.decision // \"HUMAN_REVIEW\"), allowedAction: ($r.allowedAction // \"ESCALATE_TO_HUMAN\"), ruleId: ($r.ruleId // \"NO_MATCH\"), ruleDescription: ($r.ruleDescription // \"No rule matched; safe default\"), policyVersion: ($r.policyVersion // .pv)}"
+      }
+    }
+  ]
+}

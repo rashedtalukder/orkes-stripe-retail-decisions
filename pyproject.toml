@@ -1,0 +1,32 @@
+[project]
+name = "orkes-stripe-decisions"
+version = "0.1.0"
+description = "Reference app: deterministic Orkes Conductor Business Rules for Stripe billing support, with AI (TypeSafe Jev / Claude) only interpreting customer intent."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "stripe==17.1.0",
+    "conductor-python==2.0.0",
+    "anthropic==2.12.0",
+    "typesafe-sdk==0.7.5",
+    "pydantic==2.14.4",
+]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+charts = ["matplotlib>=3.9"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/stripe_decisions"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+    "live: requires real external credentials (Stripe sandbox, Orkes, model APIs); skipped by default",
+]

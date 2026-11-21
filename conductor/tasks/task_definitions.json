@@ -1,0 +1,91 @@
+[
+  {
+    "name": "sd_fetch_billing_facts",
+    "description": "Read and normalize verified Stripe sandbox billing facts for a case (or load a labeled fixture).",
+    "retryCount": 2,
+    "retryLogic": "EXPONENTIAL_BACKOFF",
+    "retryDelaySeconds": 2,
+    "timeoutSeconds": 60,
+    "responseTimeoutSeconds": 45,
+    "timeoutPolicy": "TIME_OUT_WF",
+    "inputKeys": [
+      "case",
+      "factsSource",
+      "fixtureId"
+    ],
+    "outputKeys": [
+      "factsStatus",
+      "factsSource",
+      "currency",
+      "alreadyRefunded",
+      "duplicateVerified",
+      "duplicateRefundableCents",
+      "duplicateChargeId",
+      "prorationPresent",
+      "paymentFailed",
+      "requestedCents",
+      "targetChargeId",
+      "evidence",
+      "error"
+    ],
+    "ownerEmail": "orkes-stripe-decisions@example.com"
+  },
+  {
+    "name": "sd_classify_intent",
+    "description": "Classify customer intent with a configured model adapter (TypeSafe Jev or Claude). Interpretation only.",
+    "retryCount": 1,
+    "retryLogic": "FIXED",
+    "retryDelaySeconds": 1,
+    "timeoutSeconds": 60,
+    "responseTimeoutSeconds": 45,
+    "timeoutPolicy": "TIME_OUT_WF",
+    "inputKeys": [
+      "message",
+      "classifier"
+    ],
+    "outputKeys": [
+      "provider",
+      "model",
+      "intent",
+      "schemaValid",
+      "latencyMs",
+      "probabilities",
+      "confidence",
+      "usage",
+      "rawIntent",
+      "error"
+    ],
+    "ownerEmail": "orkes-stripe-decisions@example.com"
+  },
+  {
+    "name": "sd_execute_refund",
+    "description": "Guarded, idempotent Stripe sandbox refund. Dry-run unless explicitly enabled twice.",
+    "retryCount": 1,
+    "retryLogic": "FIXED",
+    "retryDelaySeconds": 5,
+    "timeoutSeconds": 60,
+    "responseTimeoutSeconds": 45,
+    "timeoutPolicy": "TIME_OUT_WF",
+    "inputKeys": [
+      "caseId",
+      "customerId",
+      "decision",
+      "ruleId",
+      "policyVersion",
+      "chargeId",
+      "amountCents",
+      "currency",
+      "factsSource",
+      "dryRun"
+    ],
+    "outputKeys": [
+      "executed",
+      "dryRun",
+      "refundId",
+      "status",
+      "idempotencyKey",
+      "reason"
+    ],
+    "ownerEmail": "orkes-stripe-decisions@example.com"
+  }
+]

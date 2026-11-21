@@ -1,0 +1,30 @@
+{
+  "_provenance": {
+    "captured_at": "2026-11-21T00:57:15+00:00",
+    "note": "Object IDs are sandbox test-mode IDs. No customer PII is stored.",
+    "source": "Normalized from real Stripe sandbox API reads (test mode)",
+    "stripe_account": "acct_1UdzTR40CXDSlSkI"
+  },
+  "alreadyRefunded": "NO",
+  "currency": "usd",
+  "duplicateChargeId": null,
+  "duplicateRefundableCents": 0,
+  "duplicateVerified": "NO",
+  "error": null,
+  "evidence": {
+    "failedCharges": 2,
+    "invoices": 2,
+    "openFailedInvoices": [
+      "in_1Ue2Zr40CXDSlSkITdIdF7v8"
+    ],
+    "prorationInvoices": [],
+    "subscriptionStatuses": [
+      "past_due"
+    ],
+    "succeededCharges": 1
+  },
+  "factsStatus": "VERIFIED",
+  "paymentFailed": "YES",
+  "prorationPresent": "NO",
+  "targetChargeId": "ch_3Ue2Zk40CXDSlSkI1xKPIAtk"
+}

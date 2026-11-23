@@ -170,4 +170,4 @@ uv run --env-file .env pytest -m live -v      # 23 boundary cases through the re
 
 [Architecture](docs/architecture.md) · [Stripe setup](docs/stripe-setup.md) · [Demo script](docs/demo-script.md) ·
 [Benchmark methodology](docs/benchmark-methodology.md) · [Refund verification](docs/refund-verification.md) ·
-[Blog outline](docs/blog-outline.md)
+[Blog outline](docs/blog-outline.md) · [Screenshots](docs/screenshots/README.md) (Orkes executions and the Stripe sandbox)

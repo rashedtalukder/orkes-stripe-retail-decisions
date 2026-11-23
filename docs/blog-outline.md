@@ -80,7 +80,8 @@ from Conductor. Determinism of the decision comes from the rule table. The model
 
 ## 8. Limits we'd want readers to know
 
-- Synthetic data with one labeler. 11 contradictory and 11 adversarial cases, so the intervals are wide.
+- Synthetic data. Labels were confirmed by a blind independent review (117/120, κ = 0.970); the 3 disagreements were
+  all prompt-injection messages, adjudicated with no changes. 11 contradictory and 11 adversarial cases, so the intervals are wide.
 - One configuration per model (Claude `effort=low`), frozen facts from 8 scenarios, and a 24-case workflow sample.
 - Costs are list-price estimates. Latency depends on location and time of day.
 

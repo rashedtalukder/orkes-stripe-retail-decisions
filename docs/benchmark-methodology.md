@@ -16,7 +16,10 @@ file byte for byte). It has 120 synthetic messages with stable IDs `B001`–`B12
 - Gold intents: DUPLICATE_CHARGE_CLAIM 30, PRORATION_QUESTION 18, REFUND_REQUEST 22, CANCELLATION_REQUEST 14, FAILED_PAYMENT 16, UNKNOWN 20.
 - Difficulty: obvious 69, ambiguous 29, contradictory 11 (the claim conflicts with the paired facts), adversarial 11 (prompt injection or social engineering).
 - Each row is paired with a frozen facts fixture (`fixtures/facts/S1..S8.json`), normalized from real Stripe sandbox reads.
-- The dataset author assigned the labels, and each row is marked `label_review: pending independent review`. Labels
+- The dataset author assigned the labels. A blind independent review (shuffled messages with opaque IDs; labels,
+  categories, facts and model outputs hidden) agreed on 117/120 (97.5%), Cohen's κ = 0.970. All 3 disagreements were
+  adversarial instruction-only messages (B112, B113, B114). They were adjudicated without consulting model outputs
+  and kept as UNKNOWN; the cause was an ambiguous reviewer guideline, now clarified. Details: `benchmark/label-review/`. Labels
   were not changed after any model results were seen. Have someone else review them before results are published.
 
 ## Phases (reported separately)
@@ -112,7 +115,7 @@ concurrency), policy version, rule file SHA-256 and URL, dataset size, repeat co
 
 ## Limitations
 
-- The data is synthetic and mostly English (two non-English rows). One author labeled it. The contradictory and
+- The data is synthetic and mostly English (two non-English rows). One author and one independent reviewer labeled it. The contradictory and
   adversarial categories have 11 cases each, so per-category rates have wide uncertainty.
 - Facts are frozen fixtures from 8 scenarios. The benchmark tests interpretation under fixed facts, not Stripe edge cases.
 - Each provider is tested in one configuration: Jev 1.14 with default settings, and Claude Haiku 5.5 with

@@ -153,12 +153,21 @@ ROWS: list[tuple[str, str, str, str, int]] = [
 ]
 
 
+# Blind independent review, 2026-11-23 (benchmark/label-review/): 117/120 agreed, kappa 0.970. The 3 disagreements
+# were adjudicated without consulting model outputs; all kept as UNKNOWN. No gold label changed.
+REVIEW = "blind independent review 2026-11-23"
+ADJUDICATED = {"B112", "B113", "B114"}
+
+
 def build(out: Path) -> list[dict]:
     rows = []
     for i, (msg, intent, diff, fx, cents) in enumerate(ROWS, start=1):
-        rows.append({"id": f"B{i:03d}", "message": msg, "gold_intent": intent, "difficulty": diff,
+        cid = f"B{i:03d}"
+        review = (f"{REVIEW}: reviewer disagreed; adjudicated, label kept" if cid in ADJUDICATED
+                  else f"{REVIEW}: confirmed")
+        rows.append({"id": cid, "message": msg, "gold_intent": intent, "difficulty": diff,
                      "facts_fixture": fx, "requestedCents": cents, "currency": "usd",
-                     "label_source": "dataset author", "label_review": "pending independent review"})
+                     "label_source": "dataset author", "label_review": review})
     out.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
     return rows
 

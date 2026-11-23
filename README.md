@@ -40,7 +40,7 @@ customer case ──► [sd_classify_intent]* ──► [sd_fetch_billing_facts]
 
 ## Benchmark results (run `20261121T022545Z`)
 
-The benchmark has 120 synthetic cases with one author's labels. Each model classified every case 3 times
+The benchmark has 120 synthetic cases. The author's labels were confirmed by a blind independent review (117/120 agreed, Cohen's κ = 0.970; the 3 disagreements were adjudicated with no label changes, see [benchmark/label-review/](benchmark/label-review/)). Each model classified every case 3 times
 independently (360 calls per model), and every decision came from the same pinned Orkes Business Rule over frozen
 facts captured from real Stripe sandbox reads. All 720 model calls, 33 policy evaluations and 72 workflow runs
 completed, with 0 provider errors and 0 schema-invalid outputs.

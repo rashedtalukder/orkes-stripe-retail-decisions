@@ -5,7 +5,7 @@ Same pinned Orkes Business Rule, same frozen Stripe-derived facts, two intent cl
 ## Run
 
 - Date (UTC): 2026-11-21T02:29:36+00:00; wall time 231.4 s
-- Dataset: dataset.v1.jsonl: 120 synthetic cases (single author's labels, pending independent review); categories {"obvious": 69, "ambiguous": 29, "contradictory": 11, "adversarial": 11}; 3 independent calls per case per provider
+- Dataset: dataset.v1.jsonl: 120 synthetic cases (author labels, confirmed by blind independent review: 117/120, kappa 0.970, see benchmark/label-review/); categories {"obvious": 69, "ambiguous": 29, "contradictory": 11, "adversarial": 11}; 3 independent calls per case per provider
 - Policy: billing-support-policy/v1 (sha256 20606ec3c7cb), evaluated by Orkes Conductor BUSINESS_RULE via billing_policy_eval v1
 - Policy evaluations: 33 distinct (facts, intent, amount) combinations, 0 failed; gold-decision failures: 0
 - Facts: frozen fixtures normalized from real Stripe sandbox reads (fixtures/facts)
@@ -141,7 +141,7 @@ Workflow runs that did not complete: none.
 
 ## Limitations
 
-- Synthetic messages, labeled by one author. Labels were not changed after seeing results.
+- Synthetic messages. Author labels, blind-reviewed by a second person (117/120 agreed; 3 adjudicated, unchanged). Labels were not changed after seeing results.
 - Facts are frozen fixtures from 8 sandbox scenarios. This measures interpretation under fixed facts.
 - One configuration per provider; other settings (effort, prompts, model versions) will differ.
 - Latency depends on network location, provider load and time of day. Phase A uses 4 concurrent requests.

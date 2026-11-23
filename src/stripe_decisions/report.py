@@ -47,7 +47,7 @@ def render(path: str | Path) -> str:
         "## Run",
         "",
         f"- Date (UTC): {m['date_utc']}; wall time {m.get('wall_seconds')} s" + (f"; report rebuilt {m['report_rebuilt_utc']}" if m.get("report_rebuilt_utc") else ""),
-        f"- Dataset: {m['dataset']}: {ds['cases']} synthetic cases (single author's labels, pending independent review); "
+        f"- Dataset: {m['dataset']}: {ds['cases']} synthetic cases (author labels, confirmed by blind independent review: 117/120, kappa 0.970, see benchmark/label-review/); "
         f"categories {json.dumps(ds['by_difficulty'])}; {m['repeats']} independent calls per case per provider",
         f"- Policy: {m['policy_version']} (sha256 {m['rule_file_sha256'][:12]}), evaluated by {m['policy_engine']}",
         f"- Policy evaluations: {pe.get('distinct_combinations')} distinct (facts, intent, amount) combinations, "
@@ -122,7 +122,7 @@ def render(path: str | Path) -> str:
                   f"- Exact McNemar test (two-sided) on those discordant cases: p = {cmp_['mcnemar_exact_p_two_sided']}. "
                   + ("Not statistically significant at the 0.05 level on this dataset."
                      if (cmp_['mcnemar_exact_p_two_sided'] or 1) >= 0.05 else
-                     "Below 0.05 on this dataset; this is a single synthetic dataset with one labeler."),
+                     "Below 0.05 on this dataset; this is a single synthetic dataset."),
                   "",
                   f"| Case | Category | Message | Gold intent -> decision | {DISPLAY.get(a, a)} -> decision | {DISPLAY.get(b, b)} -> decision |",
                   "|---|---|---|---|---|---|"]
@@ -178,7 +178,7 @@ def render(path: str | Path) -> str:
         for g in labels:
             lines.append(f"| {g} | " + " | ".join(str(cm[g][p]) for p in labels) + " |")
     lines += ["", "## Limitations", "",
-              "- Synthetic messages, labeled by one author. Labels were not changed after seeing results.",
+              "- Synthetic messages. Author labels, blind-reviewed by a second person (117/120 agreed; 3 adjudicated, unchanged). Labels were not changed after seeing results.",
               "- Facts are frozen fixtures from 8 sandbox scenarios. This measures interpretation under fixed facts.",
               "- One configuration per provider; other settings (effort, prompts, model versions) will differ.",
               "- Latency depends on network location, provider load and time of day. Phase A uses 4 concurrent requests.",

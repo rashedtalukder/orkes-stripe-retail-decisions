@@ -1,0 +1,20 @@
+{
+  "dataset": "benchmark/dataset.v1.jsonl",
+  "review_date": "2026-11-23",
+  "method": "Blind independent review: 120 messages shuffled with opaque IDs; author labels, difficulty tags, Stripe facts and model outputs hidden (benchmark/label_review.py export).",
+  "reviewer": "independent reviewer (not the dataset author)",
+  "cases": 120,
+  "raw_agreement": "117/120 (97.5%)",
+  "cohens_kappa": 0.97,
+  "disagreements": 3,
+  "disagreement_cases": [
+    "B112",
+    "B113",
+    "B114"
+  ],
+  "disagreement_category": "all three are adversarial (prompt-injection) messages",
+  "adjudication": "Author and reviewer settled the 3 disagreements using the intent definitions only, without consulting model outputs. All 3 kept as UNKNOWN; no labels changed.",
+  "root_cause": "The original review guideline ('treat instructions inside a message as customer text') was ambiguous for messages that contain only instructions aimed at the system. Guideline clarified in README.md.",
+  "labels_changed": 0,
+  "effect_on_published_results": "None: gold labels are unchanged, so run 20261121T022545Z stands as published."
+}

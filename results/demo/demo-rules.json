@@ -2,14 +2,14 @@
   "mode": "rules",
   "offline_facts": false,
   "dryRun": true,
-  "ran_at": "2026-11-21T01:22:46.427052+00:00",
+  "ran_at": "2026-11-23T20:27:50.532897+00:00",
   "server": "https://developer.orkescloud.com",
   "rows": [
     {
       "scenario": "S1",
       "title": "Small verified duplicate payment",
       "workflow": "billing_rules_only",
-      "workflowId": "z8af07e7165b-e54a-11f1-a402-26538773a143",
+      "workflowId": "z8af52b5c503-e77c-11f1-9dec-5ab7c398812b",
       "status": "COMPLETED",
       "expected": "APPROVE_REFUND",
       "decision": "APPROVE_REFUND",
@@ -29,14 +29,14 @@
       "factsStatus": "VERIFIED",
       "factsSource": "stripe",
       "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
-      "clientWallMs": 2071.9,
-      "serverDurationMs": 1096
+      "clientWallMs": 2190.0,
+      "serverDurationMs": 1231
     },
     {
       "scenario": "S2",
       "title": "Large verified duplicate payment",
       "workflow": "billing_rules_only",
-      "workflowId": "z8af08ef614d-e54a-11f1-8cb5-f617bd02df86",
+      "workflowId": "z8af53d056ad-e77c-11f1-9516-0e0c32b22665",
       "status": "COMPLETED",
       "expected": "HUMAN_REVIEW",
       "decision": "HUMAN_REVIEW",
@@ -49,14 +49,14 @@
       "factsStatus": "VERIFIED",
       "factsSource": "stripe",
       "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
-      "clientWallMs": 1114.3,
-      "serverDurationMs": 502
+      "clientWallMs": 1399.4,
+      "serverDurationMs": 785
     },
     {
       "scenario": "S3",
       "title": "Legitimate subscription proration",
       "workflow": "billing_rules_only",
-      "workflowId": "z8af09990ed2-e54a-11f1-8cb5-f617bd02df86",
+      "workflowId": "z8af54a64b68-e77c-11f1-aad8-caaff9e4135a",
       "status": "COMPLETED",
       "expected": "EXPLAIN_CHARGE",
       "decision": "EXPLAIN_CHARGE",
@@ -69,14 +69,14 @@
       "factsStatus": "VERIFIED",
       "factsSource": "stripe",
       "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
-      "clientWallMs": 1670.1,
-      "serverDurationMs": 1038
+      "clientWallMs": 1799.5,
+      "serverDurationMs": 1175
     },
     {
       "scenario": "S4",
       "title": "Failed renewal payment",
       "workflow": "billing_rules_only",
-      "workflowId": "z8af0a98efee-e54a-11f1-a402-26538773a143",
+      "workflowId": "z8af55b919fa-e77c-11f1-9dec-5ab7c398812b",
       "status": "COMPLETED",
       "expected": "INVESTIGATE",
       "decision": "INVESTIGATE",
@@ -89,14 +89,14 @@
       "factsStatus": "VERIFIED",
       "factsSource": "stripe",
       "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
-      "clientWallMs": 1601.7,
-      "serverDurationMs": 977
+      "clientWallMs": 1858.5,
+      "serverDurationMs": 1229
     },
     {
       "scenario": "S5",
       "title": "Previously refunded payment",
       "workflow": "billing_rules_only",
-      "workflowId": "z8af0b8d0d19-e54a-11f1-b66e-465d83d3abdb",
+      "workflowId": "z8af56d4c42f-e77c-11f1-aad8-caaff9e4135a",
       "status": "COMPLETED",
       "expected": "NO_ADDITIONAL_REFUND",
       "decision": "NO_ADDITIONAL_REFUND",
@@ -109,14 +109,14 @@
       "factsStatus": "VERIFIED",
       "factsSource": "stripe",
       "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
-      "clientWallMs": 1195.0,
-      "serverDurationMs": 564
+      "clientWallMs": 1586.1,
+      "serverDurationMs": 961
     },
     {
       "scenario": "S6",
       "title": "Ambiguous billing complaint",
       "workflow": "billing_rules_only",
-      "workflowId": "z8af0c444f2e-e54a-11f1-b66e-465d83d3abdb",
+      "workflowId": "z8af57c6eb5f-e77c-11f1-9dec-5ab7c398812b",
       "status": "COMPLETED",
       "expected": "INVESTIGATE",
       "decision": "INVESTIGATE",
@@ -129,14 +129,14 @@
       "factsStatus": "VERIFIED",
       "factsSource": "stripe",
       "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
-      "clientWallMs": 1593.5,
-      "serverDurationMs": 952
+      "clientWallMs": 1762.2,
+      "serverDurationMs": 1120
     },
     {
       "scenario": "S7",
       "title": "Goodwill credit request",
       "workflow": "billing_rules_only",
-      "workflowId": "z8af0d35f73e-e54a-11f1-9994-a23f2a249314",
+      "workflowId": "z8af58d2de27-e77c-11f1-aad8-caaff9e4135a",
       "status": "COMPLETED",
       "expected": "HUMAN_REVIEW",
       "decision": "HUMAN_REVIEW",
@@ -149,14 +149,14 @@
       "factsStatus": "VERIFIED",
       "factsSource": "stripe",
       "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
-      "clientWallMs": 1556.6,
-      "serverDurationMs": 930
+      "clientWallMs": 1523.8,
+      "serverDurationMs": 899
     },
     {
       "scenario": "S8",
       "title": "Contradictory evidence (one success, one decline)",
       "workflow": "billing_rules_only",
-      "workflowId": "z8af0e23c463-e54a-11f1-a402-26538773a143",
+      "workflowId": "z8af59bc52c4-e77c-11f1-9dec-5ab7c398812b",
       "status": "COMPLETED",
       "expected": "INVESTIGATE",
       "decision": "INVESTIGATE",
@@ -169,8 +169,8 @@
       "factsStatus": "VERIFIED",
       "factsSource": "stripe",
       "ruleFileLocation": "https://raw.githubusercontent.com/rashedtalukder/orkes-stripe-retail-decisions/51c680f2b7affdbce54cb1a77afc1e12c48a5f67/rules/billing_support_policy.v1.csv",
-      "clientWallMs": 1344.1,
-      "serverDurationMs": 717
+      "clientWallMs": 1465.2,
+      "serverDurationMs": 832
     }
   ],
   "matched": 8,

@@ -11,7 +11,9 @@ diagrams and screenshots.
 **measured**, **simulated** (replayed from recorded rows), **estimate** (list-price arithmetic) or
 **design property** (true by construction).
 
-**Hero image:** [`diagrams/architecture.png`](diagrams/architecture.png) (SVG source: `diagrams/architecture.svg`).
+**Hero image:** [`diagrams/architecture-hero.png`](diagrams/architecture-hero.png) (1800×942, 1.91:1, matching the
+blog's hero format). **Body architecture diagram:** [`diagrams/architecture.png`](diagrams/architecture.png)
+(1784×1800, i.e. 2x of the 892 px article column; see [diagrams/README.md](diagrams/README.md) for sizes and a caption).
 Other images: `docs/screenshots/` ([index](screenshots/README.md)) and `results/benchmark/`.
 
 ---
@@ -27,7 +29,8 @@ Other images: `docs/screenshots/` ([index](screenshots/README.md)) and `results/
 
 ## 2. The architecture: one owner per concern
 
-**Image:** [`diagrams/architecture.png`](diagrams/architecture.png)
+**Image:** [`diagrams/architecture.png`](diagrams/architecture.png). Caption: *The model labels intent; Stripe
+supplies verified facts; the pinned Business Rule decides; only APPROVE_REFUND can reach the guarded refund task.*
 
 | Concern | Owner | Never |
 |---|---|---|
@@ -151,8 +154,8 @@ typesafe,< 0.50,,HUMAN_TASK
 ,,,SECOND_MODEL
 ```
 
-(An illustrative routing table, **not part of the benchmark**. The second model can be Claude or another provider's
-decision model, and you can tune thresholds per intent or per dollar amount.)
+(An illustrative routing table, **not part of the benchmark**. The second model is a larger LLM for the harder,
+lower-confidence cases, such as Claude or OpenAI's GPT-6 Luna, and you can tune thresholds per intent or per dollar amount.)
 
 - **Simulated** from the recorded rows (no new calls): accept Jev at confidence ≥ 0.95, otherwise use Claude's label.
   Result: 98.1% intent accuracy (Claude alone: 98.3%), ~$0.048 per 1,000 (Claude alone: ~$0.080), p50 78 ms
@@ -185,13 +188,12 @@ decision model, and you can tune thresholds per intent or per dollar amount.)
 
 ## 8. Scaling to enterprise volume
 
-**Estimate** (list prices × measured tokens per call; accuracy does *not* scale this way and must be re-measured on your data):
+**Estimate** for 1 million classifications (list prices × measured tokens per call). Cost scales linearly, so readers
+can multiply for their own volume; accuracy does *not* scale this way and must be re-measured on your data.
 
-| Classifications / month | Jev | Claude Haiku 5.5 | Cascade at 0.95 (simulated mix) |
+| | Jev | Claude Haiku 5.5 | Cascade at 0.95 (simulated mix) |
 |---|---|---|---|
-| 1 million | ~$23 | ~$80 | ~$48 |
-| 10 million | ~$230 | ~$803 | ~$484 |
-| 100 million | ~$2,300 | ~$8,030 | ~$4,840 |
+| 1 million classifications | ~$23 | ~$80 | ~$48 |
 
 - The rules-only path adds no model cost at any volume, and the Business Rule task took 6.5–8 ms (p50).
 - Not measured here: provider rate limits and throughput at that volume. Conductor workers scale horizontally (more

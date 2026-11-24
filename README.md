@@ -15,6 +15,8 @@ Stripe access is sandbox-only, and refunds are dry-run unless you opt in twice.
 
 ## Architecture
 
+![Architecture: rules decide, AI interprets, Orkes Conductor runs it](docs/diagrams/architecture.png)
+
 ```
 customer case ──► [sd_classify_intent]* ──► [sd_fetch_billing_facts] ──► normalize_intent (JQ)
                    AI: interpretation only     Stripe sandbox: evidence      invalid/unknown -> UNKNOWN
